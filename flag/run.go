@@ -49,6 +49,8 @@ func (f *Flag) Arun() {
 				f.Download = f.Version
 				f.D()
 			}
+		} else {
+			fmt.Println(lang.Lang("nofilecheck"))
 		}
 	}
 	f.Jsonbyte = b
