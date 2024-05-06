@@ -42,12 +42,14 @@ func (f *Flag) Arun() {
 			}
 		}
 		InheritsFrom, _ := t["inheritsFrom"].(string)
-		if InheritsFrom != "" {
-			f.Download = InheritsFrom
-			f.D()
-		} else {
-			f.Download = f.Version
-			f.D()
+		if !f.Noverify {
+			if InheritsFrom != "" {
+				f.Download = InheritsFrom
+				f.D()
+			} else {
+				f.Download = f.Version
+				f.D()
+			}
 		}
 	}
 	f.Jsonbyte = b

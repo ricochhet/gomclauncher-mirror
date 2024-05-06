@@ -76,6 +76,7 @@ func init() {
 	//flag.StringVar(&uselang, "lang", "", lang.Lang("langusage"))
 	flag.BoolVar(&v, "v", false, lang.Lang("vusage"))
 	flag.BoolVar(&tidy, "tidy", false, lang.Lang("tidy"))
+	flag.BoolVar(&f.Noverify, "noverify", false, lang.Lang("noverify"))
 	flag.Parse()
 	if uselang != "" {
 		err := lang.Setlanguge(uselang)
