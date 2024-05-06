@@ -72,7 +72,7 @@ func (f *Flag) Aonline() {
 func (f *Flag) Listname() {
 	fmt.Println("-----------------")
 	for k, v := range f.Gmlconfig {
-		if k == "https://authserver.mojang.com" {
+		if k == "https://sessionserver.mojang.com" {
 			fmt.Println(lang.Lang("minecraftlogin"))
 		} else if k == "ms" {
 			fmt.Println(lang.Lang("mslogin"))

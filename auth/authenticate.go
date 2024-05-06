@@ -12,10 +12,10 @@ var (
 	NoProfiles = errors.New("No Available Profiles")
 )
 
-//Authenticate return accessToken, err
+// Authenticate return accessToken, err
 func Authenticate(ApiAddress, username, email, password, clientToken string) (Auth, error) {
 	if ApiAddress == "" {
-		ApiAddress = "https://authserver.mojang.com"
+		ApiAddress = "https://sessionserver.mojang.com"
 	}
 	a := authenticatePayload{
 		Agent: authenticateAgent{

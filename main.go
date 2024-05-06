@@ -58,7 +58,7 @@ func main() {
 	if f.ApiAddress != "" {
 		f.Authlib()
 	} else {
-		f.ApiAddress = "https://authserver.mojang.com"
+		f.ApiAddress = "https://sessionserver.mojang.com"
 	}
 	if remove {
 		f.Remove(ms)

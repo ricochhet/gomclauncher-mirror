@@ -79,7 +79,7 @@ func (g *Gameinfo) GenLauncherCmdArgs() (l *launcher1155, args []string, err err
 	l.flag = append(l.flag, `-Dminecraft.client.jar=`+g.Minecraftpath+`/versions/`+l.json.ID+`/`+l.json.ID+`.jar`)
 	l.flag = append(l.flag, `-Xmx`+g.RAM+`m`)
 	l.flag = append(l.flag, `-Xms`+g.RAM+`m`)
-	if g.ApiAddress != "https://authserver.mojang.com" {
+	if g.ApiAddress != "https://sessionserver.mojang.com" {
 		l.flag = append(l.flag, `-Dauthlibinjector.side=client`)
 		l.flag = append(l.flag, `-javaagent:`+g.authlibpath+`=`+g.ApiAddress)
 	}

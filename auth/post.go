@@ -21,7 +21,7 @@ func init() {
 
 func post(ApiAddress, endpoint string, Payload []byte) ([]byte, error, int) {
 	var api string
-	if ApiAddress != "https://authserver.mojang.com" {
+	if ApiAddress != "https://sessionserver.mojang.com" {
 		var err error
 		api, err = url.JoinPath(ApiAddress, "/authserver")
 		if err != nil {
@@ -29,7 +29,7 @@ func post(ApiAddress, endpoint string, Payload []byte) ([]byte, error, int) {
 		}
 	}
 	if api == "" {
-		api = "https://authserver.mojang.com"
+		api = "https://sessionserver.mojang.com"
 	}
 	h, err := http.NewRequest("POST", api+"/"+endpoint, bytes.NewReader(Payload))
 	if err != nil {
