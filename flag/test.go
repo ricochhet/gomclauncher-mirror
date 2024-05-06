@@ -2,11 +2,11 @@ package flag
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 )
 
 func Test(path string) bool {
-	b, err := ioutil.ReadFile(path)
+	b, err := os.ReadFile(path)
 	if err != nil {
 		return false
 	}
@@ -30,7 +30,7 @@ type t struct {
 }
 
 func Find(path string) []string {
-	files, err := ioutil.ReadDir(path)
+	files, err := os.ReadDir(path)
 	if err != nil {
 		panic(err)
 	}

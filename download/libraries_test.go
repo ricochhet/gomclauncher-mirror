@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"testing"
@@ -14,7 +13,7 @@ import (
 )
 
 func TestNewlibrarie(t *testing.T) {
-	b, err := ioutil.ReadFile("1.15.2.json")
+	b, err := os.ReadFile("1.15.2.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,7 +27,7 @@ func TestNewlibrarie(t *testing.T) {
 }
 
 func TestAssets(t *testing.T) {
-	bb, err := ioutil.ReadFile("1.16.json")
+	bb, err := os.ReadFile("1.16.json")
 	if err != nil {
 		t.Fatal(err)
 	}

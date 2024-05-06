@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/xmdhs/gomclauncher/download"
@@ -50,9 +49,9 @@ func (f *Flag) D() {
 	}
 	var b []byte
 	if f.Run != "" {
-		b, err = ioutil.ReadFile(launcher.Minecraft + "/versions/" + f.Run + "/" + f.Run + ".json")
+		b, err = os.ReadFile(launcher.Minecraft + "/versions/" + f.Run + "/" + f.Run + ".json")
 	} else {
-		b, err = ioutil.ReadFile(launcher.Minecraft + "/versions/" + f.Download + "/" + f.Download + ".json")
+		b, err = os.ReadFile(launcher.Minecraft + "/versions/" + f.Download + "/" + f.Download + ".json")
 	}
 	if err != nil {
 		panic(err)

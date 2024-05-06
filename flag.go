@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -30,7 +29,7 @@ var (
 
 func init() {
 	f.Gmlconfig = make(aflag.Gmlconfig)
-	b, err := ioutil.ReadFile("gml.json")
+	b, err := os.ReadFile("gml.json")
 	if err != nil {
 		if os.IsNotExist(err) {
 			return

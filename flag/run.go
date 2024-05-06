@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/xmdhs/gomclauncher/lang"
@@ -18,7 +17,7 @@ func (f *Flag) Arun() {
 	} else {
 		f.Gamedir = f.Minecraftpath
 	}
-	b, err := ioutil.ReadFile(f.Minecraftpath + "/versions/" + f.Version + "/" + f.Version + ".json")
+	b, err := os.ReadFile(f.Minecraftpath + "/versions/" + f.Version + "/" + f.Version + ".json")
 	if err != nil {
 		fmt.Println(lang.Lang("nofindthisversion"))
 		panic(err)
@@ -36,7 +35,7 @@ func (f *Flag) Arun() {
 			if err != nil {
 				panic(err)
 			}
-			err := ioutil.WriteFile(f.Minecraftpath+"/versions/"+f.Version+"/"+f.Version+".json", b, 0777)
+			err := os.WriteFile(f.Minecraftpath+"/versions/"+f.Version+"/"+f.Version+".json", b, 0777)
 			if err != nil {
 				panic(err)
 			}

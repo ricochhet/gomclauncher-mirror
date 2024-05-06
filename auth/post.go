@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -49,7 +49,7 @@ func post(ApiAddress, endpoint string, Payload []byte) ([]byte, error, int) {
 	if err != nil {
 		return nil, fmt.Errorf("post: %w", err), 0
 	}
-	b, err := ioutil.ReadAll(rep.Body)
+	b, err := io.ReadAll(rep.Body)
 	if err != nil {
 		return nil, fmt.Errorf("post: %w", err), 0
 	}

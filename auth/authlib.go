@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/url"
 
 	"github.com/xmdhs/gomclauncher/internal"
@@ -74,7 +74,7 @@ func checkapi(url string) error {
 	if err != nil {
 		return fmt.Errorf("checkapi: %w", err)
 	}
-	b, err := ioutil.ReadAll(reps.Body)
+	b, err := io.ReadAll(reps.Body)
 	if err != nil {
 		return fmt.Errorf("checkapi: %w", err)
 	}

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -181,7 +181,7 @@ func GetProfile(Authorization string) (*Profile, error) {
 	if err != nil {
 		return nil, fmt.Errorf("getProfile: %w", err)
 	}
-	b, err := ioutil.ReadAll(rep.Body)
+	b, err := io.ReadAll(rep.Body)
 	if err != nil {
 		return nil, fmt.Errorf("getProfile: %w", err)
 	}
@@ -241,7 +241,7 @@ func httPost(url, msg, ContentType string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("httPost: %w", err)
 	}
-	b, err := ioutil.ReadAll(rep.Body)
+	b, err := io.ReadAll(rep.Body)
 	if err != nil {
 		return nil, fmt.Errorf("httPost: %w", err)
 	}

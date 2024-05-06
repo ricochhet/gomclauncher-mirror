@@ -3,14 +3,14 @@ package download
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/xmdhs/gomclauncher/launcher"
 )
 
 func TestUnzip(t *testing.T) {
-	b, err := ioutil.ReadFile("1.15.2.json")
+	b, err := os.ReadFile("1.15.2.json")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/xmdhs/gomclauncher/auth"
@@ -12,7 +11,7 @@ import (
 )
 
 func saveconfig(gmlconfig Gmlconfig) {
-	b, err := ioutil.ReadFile("gml.json")
+	b, err := os.ReadFile("gml.json")
 	if err != nil && !os.IsNotExist(err) {
 		panic(err)
 	} else {

@@ -6,11 +6,11 @@ import (
 	"gomclauncher/auth"
 	"gomclauncher/download"
 	"gomclauncher/launcher"
-	"io/ioutil"
+	"os"
 )
 
 func main() {
-	b, err := ioutil.ReadFile("./1.15.2.json")
+	b, err := os.ReadFile("./1.15.2.json")
 	if err != nil {
 		fmt.Println(err)
 	}
