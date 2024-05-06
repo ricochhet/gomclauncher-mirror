@@ -25,7 +25,6 @@ type Flag struct {
 	Runlist        bool
 	Runram         string
 	Runflag        string
-	Noverify       bool
 	Proxy          string
 	Independent    bool
 	Outmsg         bool

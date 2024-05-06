@@ -41,16 +41,12 @@ func (f *Flag) Arun() {
 			}
 		}
 		InheritsFrom, _ := t["inheritsFrom"].(string)
-		if !f.Noverify {
-			if InheritsFrom != "" {
-				f.Download = InheritsFrom
-				f.D()
-			} else {
-				f.Download = f.Version
-				f.D()
-			}
+		if InheritsFrom != "" {
+			f.Download = InheritsFrom
+			f.D()
 		} else {
-			fmt.Println(lang.Lang("nofilecheck"))
+			f.Download = f.Version
+			f.D()
 		}
 	}
 	f.Jsonbyte = b
