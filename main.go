@@ -52,6 +52,14 @@ func main() {
 		f.Outmsg = false
 		f.D()
 	}
+	if f.Downloadfabric != "" {
+		f.Outmsg = false
+		f.Dfabric()
+	}
+	if f.Downloadquilt != "" {
+		f.Outmsg = false
+		f.Dquilt()
+	}
 	if list {
 		f.Listname()
 	}

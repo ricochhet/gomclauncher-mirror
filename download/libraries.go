@@ -161,14 +161,18 @@ func modlibraries2(l []launcher.Librarie, Launcherjson *launcher.LauncherjsonX11
 
 var mirror = map[string]map[string]string{
 	"bmclapi": {
-		`launchermeta.mojang.com`:          `bmclapi2.bangbang93.com`,
-		`piston-meta.mojang.com`:           `bmclapi2.bangbang93.com`,
-		`piston-data.mojang.com`:           `bmclapi2.bangbang93.com`,
-		`launcher.mojang.com`:              `bmclapi2.bangbang93.com`,
-		`resources.download.minecraft.net`: `bmclapi2.bangbang93.com/assets`,
-		`libraries.minecraft.net`:          `bmclapi2.bangbang93.com/maven`,
-		`files.minecraftforge.net/maven`:   `bmclapi2.bangbang93.com/maven`,
-		`maven.minecraftforge.net`:         `bmclapi2.bangbang93.com/maven`,
+		`launchermeta.mojang.com`:                      `bmclapi2.bangbang93.com`,
+		`piston-meta.mojang.com`:                       `bmclapi2.bangbang93.com`,
+		`piston-data.mojang.com`:                       `bmclapi2.bangbang93.com`,
+		`launcher.mojang.com`:                          `bmclapi2.bangbang93.com`,
+		`resources.download.minecraft.net`:             `bmclapi2.bangbang93.com/assets`,
+		`libraries.minecraft.net`:                      `bmclapi2.bangbang93.com/maven`,
+		`files.minecraftforge.net/maven`:               `bmclapi2.bangbang93.com/maven`,
+		`maven.minecraftforge.net`:                     `bmclapi2.bangbang93.com/maven`,
+		`https://meta.fabricmc.net`:                    `https://bmclapi2.bangbang93.com/fabric-meta`,
+		`https://meta.quiltmc.org`:                     `https://bmclapi2.bangbang93.com/quilt-meta`,
+		`https://maven.fabricmc.net`:                   `https://bmclapi2.bangbang93.com/maven`,
+		`https://maven.quiltmc.org/repository/release`: `https://bmclapi2.bangbang93.com/maven`,
 	},
 }
 

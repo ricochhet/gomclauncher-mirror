@@ -13,22 +13,24 @@ import (
 
 type Flag struct {
 	launcher.Gameinfo
-	Atype       string
-	Downint     int
-	Password    string
-	Email       string
-	Download    string
-	Verlist     string
-	Run         string
-	Runlist     bool
-	Runram      string
-	Runflag     string
-	Noverify    bool
-	Proxy       string
-	Independent bool
-	Outmsg      bool
-	Gmlconfig   Gmlconfig
-	Saveconfig  func(gmlconfig Gmlconfig)
+	Atype          string
+	Downint        int
+	Password       string
+	Email          string
+	Download       string
+	Downloadfabric string
+	Downloadquilt  string
+	Verlist        string
+	Run            string
+	Runlist        bool
+	Runram         string
+	Runflag        string
+	Noverify       bool
+	Proxy          string
+	Independent    bool
+	Outmsg         bool
+	Gmlconfig      Gmlconfig
+	Saveconfig     func(gmlconfig Gmlconfig)
 }
 
 func NewFlag() *Flag {
@@ -37,6 +39,58 @@ func NewFlag() *Flag {
 		Gmlconfig:  Gmlconfig,
 		Saveconfig: saveconfig,
 	}
+}
+
+func (f *Flag) Dfabric() {
+	cxt := context.TODO()
+	var err error
+	var ver string
+	if f.Run != "" {
+		_, err = os.Stat(launcher.Minecraft + "/versions/" + f.Run + "/" + f.Run + ".json")
+		ver = f.Run
+	} else {
+		_, err = os.Stat(launcher.Minecraft + "/versions/" + f.Download + "/" + f.Download + ".json")
+		ver = f.Download
+	}
+	if err != nil {
+		panic(err)
+	}
+	l, err := download.Getfabricversionlist(cxt, ver, f.Atype, func(s string) { fmt.Println(s) })
+	errr(err)
+	err = l.Downfabricjson(cxt, f.Downloadfabric, launcher.Minecraft, func(s string) { fmt.Println(s) })
+	if !(f.Run != "" && err != nil && errors.Is(err, download.NoSuch)) {
+		errr(err)
+	}
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(lang.Lang("finish"))
+}
+
+func (f *Flag) Dquilt() {
+	cxt := context.TODO()
+	var err error
+	var ver string
+	if f.Run != "" {
+		_, err = os.Stat(launcher.Minecraft + "/versions/" + f.Run + "/" + f.Run + ".json")
+		ver = f.Run
+	} else {
+		_, err = os.Stat(launcher.Minecraft + "/versions/" + f.Download + "/" + f.Download + ".json")
+		ver = f.Download
+	}
+	if err != nil {
+		panic(err)
+	}
+	l, err := download.Getquiltversionlist(cxt, ver, f.Atype, func(s string) { fmt.Println(s) })
+	errr(err)
+	err = l.Downquiltjson(cxt, f.Downloadquilt, launcher.Minecraft, func(s string) { fmt.Println(s) })
+	if !(f.Run != "" && err != nil && errors.Is(err, download.NoSuch)) {
+		errr(err)
+	}
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(lang.Lang("finish"))
 }
 
 func (f *Flag) D() {
