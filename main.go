@@ -40,6 +40,20 @@ func main() {
 	if f.Verlist != "" {
 		fmt.Println(strings.Join(f.Arunlist(), "\n"))
 	}
+	if f.Verlistfabric != "" {
+		v, err := f.Arunfabriclist()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(strings.Join(v, "\n"))
+	}
+	if f.Verlistquilt != "" {
+		v, err := f.Arunquiltlist()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(strings.Join(v, "\n"))
+	}
 	if f.Runlist {
 		s := aflag.Find(launcher.Minecraft + `/versions`)
 		for _, v := range s {

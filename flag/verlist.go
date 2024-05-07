@@ -10,14 +10,6 @@ import (
 )
 
 func (f *Flag) Arunlist() []string {
-	if f.Verlistfabric {
-		l, _ := f.Arunfabriclist()
-		return l
-	} else if f.Verlistquilt {
-		l, _ := f.Arunquiltlist()
-		return l
-	}
-
 	l, err := download.Getversionlist(context.Background(), f.Atype, func(s string) { fmt.Println(s) })
 	errr(err)
 	m := make(map[string]struct{})
@@ -50,13 +42,13 @@ func (f *Flag) Arunlist() []string {
 }
 
 func (f *Flag) Arunfabriclist() ([]string, error) {
-	_, err := semver.NewVersion(f.Verlist)
+	_, err := semver.NewVersion(f.Verlistfabric)
 	if err != nil {
 		return nil, err
 	}
 
-	if f.Verlist != "" {
-		l, err := download.Getfabricversionlist(context.Background(), f.Verlist, f.Atype, func(s string) { fmt.Println(s) })
+	if f.Verlistfabric != "" {
+		l, err := download.Getfabricversionlist(context.Background(), f.Verlistfabric, f.Atype, func(s string) { fmt.Println(s) })
 		errr(err)
 		var versions []string
 		for _, v := range l.Versions {
@@ -70,13 +62,13 @@ func (f *Flag) Arunfabriclist() ([]string, error) {
 }
 
 func (f *Flag) Arunquiltlist() ([]string, error) {
-	_, err := semver.NewVersion(f.Verlist)
+	_, err := semver.NewVersion(f.Verlistquilt)
 	if err != nil {
 		return nil, err
 	}
 
-	if f.Verlist != "" {
-		l, err := download.Getquiltversionlist(context.Background(), f.Verlist, f.Atype, func(s string) { fmt.Println(s) })
+	if f.Verlistquilt != "" {
+		l, err := download.Getquiltversionlist(context.Background(), f.Verlistquilt, f.Atype, func(s string) { fmt.Println(s) })
 		errr(err)
 		var versions []string
 		for _, v := range l.Versions {
