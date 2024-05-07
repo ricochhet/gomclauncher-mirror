@@ -2,3 +2,5 @@
 gml.json
 .minecraft
 *.exe
+*.syso
+res
