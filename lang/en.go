@@ -9,6 +9,8 @@ var en = map[string]string{
 	"Downloadfabricusage":        "Fabric version to attempt downloading",
 	"Downloadquiltusage":         "Quilt version to attempt downloading",
 	"verlistusage":               "Display all available download versions, for example, release. Use ? to see all optional parameters.",
+	"verlistfabricusage":         "Display all available fabric loader versions",
+	"verlistquiltusage":          "Display all available quilt loader versions",
 	"intusage":                   "Number of goroutines to use when downloading files.",
 	"runusage":                   "Version to attempt launching",
 	"runlistusage":               "Display all available launchable versions",

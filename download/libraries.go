@@ -170,9 +170,12 @@ var mirror = map[string]map[string]string{
 		`files.minecraftforge.net/maven`:               `bmclapi2.bangbang93.com/maven`,
 		`maven.minecraftforge.net`:                     `bmclapi2.bangbang93.com/maven`,
 		`https://meta.fabricmc.net`:                    `https://bmclapi2.bangbang93.com/fabric-meta`,
-		`https://meta.quiltmc.org`:                     `https://bmclapi2.bangbang93.com/quilt-meta`,
 		`https://maven.fabricmc.net`:                   `https://bmclapi2.bangbang93.com/maven`,
-		`https://maven.quiltmc.org/repository/release`: `https://bmclapi2.bangbang93.com/maven`,
+		`https://meta.quiltmc.org`:                     `https://meta.quiltmc.org`,
+		`https://maven.quiltmc.org/repository/release`: `https://maven.quiltmc.org/repository/release`,
+		// bmclapi quilt functionality is not active currently. . .
+		//`https://meta.quiltmc.org`:                     `https://bmclapi2.bangbang93.com/quilt-meta`,
+		//`https://maven.quiltmc.org/repository/release`: `https://bmclapi2.bangbang93.com/maven`,
 	},
 }
 

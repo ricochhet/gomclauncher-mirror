@@ -15,7 +15,7 @@ import (
 type Quiltjsonv3 struct {
 	atype    string
 	version  string
-	versions []launcher.Quiltjsonv3
+	Versions []launcher.Quiltjsonv3
 }
 
 func Getquiltversionlist(cxt context.Context, version, atype string, print func(string)) (*Quiltjsonv3, error) {
@@ -47,7 +47,7 @@ func Getquiltversionlist(cxt context.Context, version, atype string, print func(
 	}
 
 	v := Quiltjsonv3{}
-	err = json.Unmarshal(b, &v.versions)
+	err = json.Unmarshal(b, &v.Versions)
 	v.atype = atype
 	v.version = version
 	if err != nil {
@@ -59,7 +59,7 @@ func Getquiltversionlist(cxt context.Context, version, atype string, print func(
 func (v Quiltjsonv3) Downquiltjson(cxt context.Context, version, apath string, print func(string)) error {
 	r := newrandurls(v.atype)
 	_, f := r.auto()
-	for _, vv := range v.versions {
+	for _, vv := range v.Versions {
 		if vv.Loader.Version == version {
 			id := v.version + `-quilt-` + version
 			path, err := internal.SafePathJoin(apath, `/versions/`, id, id+".json")

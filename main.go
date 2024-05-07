@@ -38,7 +38,7 @@ func main() {
 		credits()
 	}
 	if f.Verlist != "" {
-		f.Arunlist()
+		fmt.Println(strings.Join(f.Arunlist(), "\n"))
 	}
 	if f.Runlist {
 		s := aflag.Find(launcher.Minecraft + `/versions`)

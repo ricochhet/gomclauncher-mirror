@@ -15,7 +15,7 @@ import (
 type Fabricjsonv2 struct {
 	atype    string
 	version  string
-	versions []launcher.Fabricjsonv2
+	Versions []launcher.Fabricjsonv2
 }
 
 func Getfabricversionlist(cxt context.Context, version, atype string, print func(string)) (*Fabricjsonv2, error) {
@@ -47,7 +47,7 @@ func Getfabricversionlist(cxt context.Context, version, atype string, print func
 	}
 
 	v := Fabricjsonv2{}
-	err = json.Unmarshal(b, &v.versions)
+	err = json.Unmarshal(b, &v.Versions)
 	v.atype = atype
 	v.version = version
 	if err != nil {
@@ -59,7 +59,7 @@ func Getfabricversionlist(cxt context.Context, version, atype string, print func
 func (v Fabricjsonv2) Downfabricjson(cxt context.Context, version, apath string, print func(string)) error {
 	r := newrandurls(v.atype)
 	_, f := r.auto()
-	for _, vv := range v.versions {
+	for _, vv := range v.Versions {
 		if vv.Loader.Version == version {
 			id := v.version + `-fabric-` + version
 			path, err := internal.SafePathJoin(apath, `/versions/`, id, id+".json")

@@ -21,6 +21,8 @@ type Flag struct {
 	Downloadfabric string
 	Downloadquilt  string
 	Verlist        string
+	Verlistfabric  bool
+	Verlistquilt   bool
 	Run            string
 	Runlist        bool
 	Runram         string
