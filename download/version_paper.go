@@ -64,6 +64,9 @@ func (v Paperjsonv2) Downpaperjar(cxt context.Context, version, apath string, pr
 		if strconv.Itoa(vv.Build) == version {
 			id := v.version + `-paper-` + version
 			path, err := internal.SafePathJoin(apath, `/servers/`, id, id+".jar")
+			if ver(path, vv.Downloads.Application.SHA256) {
+				return nil
+			}
 			if err != nil {
 				return fmt.Errorf("Downpaperjson: %w", err)
 			}
