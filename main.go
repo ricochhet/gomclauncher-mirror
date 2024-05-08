@@ -72,7 +72,7 @@ func main() {
 	if f.Runlistpaper {
 		s := aflag.Find(launcher.Minecraft + `/servers`)
 		for _, v := range s {
-			if aflag.Test(launcher.Minecraft + `/servers/` + v + `/` + v + ".json") {
+			if aflag.Testservers(launcher.Minecraft + `/servers/` + v + `/` + v + ".json") {
 				fmt.Println(v)
 			}
 		}

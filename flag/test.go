@@ -24,9 +24,29 @@ func Test(path string) bool {
 	return true
 }
 
+func Testservers(path string) bool {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return false
+	}
+	t := t2{}
+	err = json.Unmarshal(b, &t)
+	if err != nil {
+		return false
+	}
+	if t.ID == "" {
+		return false
+	}
+	return true
+}
+
 type t struct {
 	Libraries []interface{} `json:"Libraries"`
 	MainClass string        `json:"mainClass"`
+}
+
+type t2 struct {
+	ID string `json:"id"`
 }
 
 func Find(path string) []string {
