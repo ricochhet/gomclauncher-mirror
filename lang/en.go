@@ -6,6 +6,7 @@ var en = map[string]string{
 	"username":                   "Username",
 	"emailusage":                 "Official/external login account email. Set this when using official/external login, then no need to set username",
 	"Downloadusage":              "Version to attempt downloading",
+	"Downloadserverusage":        "Download server with main version",
 	"Downloadfabricusage":        "Fabric version to attempt downloading",
 	"Downloadquiltusage":         "Quilt version to attempt downloading",
 	"Downloadpaperusage":         "Paper version to attempt downloading",

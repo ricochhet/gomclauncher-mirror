@@ -54,6 +54,7 @@ func init() {
 	flag.StringVar(&f.Email, "email", "", lang.Lang("emailusage"))
 	flag.StringVar(&f.Password, "password", "", lang.Lang("emailusage"))
 	flag.StringVar(&f.Download, "downver", "", lang.Lang("Downloadusage"))
+	flag.BoolVar(&f.Downloadserver, "downserver", false, lang.Lang("Downloadserverusage"))
 	flag.StringVar(&f.Downloadfabric, "downverfabric", "", lang.Lang("Downloadfabricusage"))
 	flag.StringVar(&f.Downloadquilt, "downverquilt", "", lang.Lang("Downloadquiltusage"))
 	flag.StringVar(&f.Downloadpaper, "downverpaper", "", lang.Lang("Downloadpaperusage"))

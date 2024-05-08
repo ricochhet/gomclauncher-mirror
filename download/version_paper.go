@@ -82,6 +82,10 @@ func (v Paperjsonv2) Downpaperjar(cxt context.Context, version, apath string, pr
 			if err != nil {
 				return fmt.Errorf("Downpaperjson: %w %w", err, FileDownLoadFail)
 			}
+			err = Newpaperjson(v.version, version, launcher.Minecraft)
+			if err != nil {
+				panic(err)
+			}
 			return nil
 		}
 	}

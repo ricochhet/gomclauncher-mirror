@@ -52,9 +52,5 @@ func (f *Flag) Dpaper() {
 	if err != nil {
 		panic(err)
 	}
-	err = download.Newpaperjson(ver, verpaper, launcher.Minecraft)
-	if err != nil {
-		panic(err)
-	}
 	fmt.Println(lang.Lang("finish"))
 }

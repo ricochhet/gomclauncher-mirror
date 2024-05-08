@@ -5,13 +5,23 @@ import (
 	"os"
 )
 
-type Paperid struct {
+type Serverid struct {
 	ID string `json:"id"`
+}
+
+func Newserverjson(ver, apath string) error {
+	err := serverjson(ver, apath)
+	return err
 }
 
 func Newpaperjson(ver, verpaper, apath string) error {
 	name := ver + `-paper-` + verpaper
-	b, err := json.Marshal(Paperid{ID: name})
+	err := serverjson(name, apath)
+	return err
+}
+
+func serverjson(name, apath string) error {
+	b, err := json.Marshal(Serverid{ID: name})
 	if err != nil {
 		return err
 	}

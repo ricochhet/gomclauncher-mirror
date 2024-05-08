@@ -181,6 +181,37 @@ func (l Libraries) Downjar(version string) error {
 	return nil
 }
 
+func (l Libraries) Downmappings(version string) error {
+	path, err := internal.SafePathJoin(l.path, `/versions/`, version, version+"-mappings.txt")
+	if err != nil {
+		return fmt.Errorf("Downmappings: %w %w", err, FileDownLoadFail)
+	}
+	if ver(path, l.librarie.Downloads.ClientMappings.Sha1) {
+		return nil
+	}
+	_, t := l.auto()
+
+	err = retry.Do(func() error {
+		u := source(l.librarie.Downloads.ClientMappings.URL, t)
+		err := get(l.cxt, u, path)
+		if err != nil {
+			t = l.fail(t)
+			return fmt.Errorf("%v %w %v", lang.Lang("weberr"), err, u)
+		}
+		if !ver(path, l.librarie.Downloads.ClientMappings.Sha1) {
+			t = l.fail(t)
+			return fmt.Errorf("%v %v", lang.Lang("filecheckerr"), u)
+		}
+		return nil
+	}, append(retryOpts, retry.OnRetry(func(n uint, err error) {
+		l.print(fmt.Sprintf("retry %d: %v", n, err))
+	}))...)
+	if err != nil {
+		return fmt.Errorf("Downmappings: %w %w", err, FileDownLoadFail)
+	}
+	return nil
+}
+
 type downinfo struct {
 	url   string
 	path  string

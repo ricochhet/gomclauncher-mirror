@@ -19,6 +19,7 @@ type Flag struct {
 	Password       string
 	Email          string
 	Download       string
+	Downloadserver bool
 	Downloadfabric string
 	Downloadquilt  string
 	Downloadpaper  string
@@ -87,6 +88,14 @@ func (f *Flag) D() {
 	}
 	err = dl.Downjar(f.Download)
 	errr(err)
+	err = dl.Downmappings(f.Download)
+	errr(err)
+	if f.Downloadserver {
+		err = dl.Downserverjar(f.Download)
+		errr(err)
+		err = dl.Downservermappings(f.Download)
+		errr(err)
+	}
 	fmt.Println(lang.Lang("finish"))
 	if f.Outmsg {
 		fmt.Println(lang.Lang("verifylibrarie"))
