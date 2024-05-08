@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/Masterminds/semver/v3"
 	"github.com/xmdhs/gomclauncher/download"
 	"github.com/xmdhs/gomclauncher/lang"
 	"github.com/xmdhs/gomclauncher/launcher"
@@ -18,9 +19,17 @@ func (f *Flag) Dpaper() {
 	var ver string
 	var verpaper string
 	if f.Runpaper != "" {
+		_, err := semver.NewVersion(f.Runpaper)
+		if err != nil {
+			panic(err)
+		}
 		ver = strings.Split(f.Runpaper, "-")[0]
 		verpaper = strings.Split(f.Runpaper, "-")[1]
 	} else {
+		_, err := semver.NewVersion(f.Downloadpaper)
+		if err != nil {
+			panic(err)
+		}
 		ver = strings.Split(f.Downloadpaper, "-")[0]
 		verpaper = strings.Split(f.Downloadpaper, "-")[1]
 	}
