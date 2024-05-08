@@ -37,11 +37,10 @@ func (l launcher1155) Launcher115() error {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		cmd.Dir = l.Gamedir
+		fmt.Println(cmd)
 		err := cmd.Run()
 		if err != nil {
-			if err != nil {
-				return fmt.Errorf("launcher1155.Launcher115: %w", err)
-			}
+			return fmt.Errorf("launcher1155.Launcher115: %w", err)
 		}
 	} else {
 		if runtime.GOOS == "windows" && l.JavePath == "java" {

@@ -16,7 +16,7 @@ func TestVerlist(t *testing.T) {
 }
 
 func TestVerlistfabric(t *testing.T) {
-	f.Verlist = "1.20.4"
+	f.Verlistfabric = "1.20.4"
 	versionsfabric, err := f.Arunfabriclist()
 	if err != nil {
 		t.Fatal(err)
@@ -24,5 +24,29 @@ func TestVerlistfabric(t *testing.T) {
 
 	if len(versionsfabric) == 0 {
 		t.Fatal(fmt.Errorf("versionsfabric is null or empty"))
+	}
+}
+
+func TestVerlistquilt(t *testing.T) {
+	f.Verlistquilt = "1.20.4"
+	versionsquilt, err := f.Arunquiltlist()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(versionsquilt) == 0 {
+		t.Fatal(fmt.Errorf("versionsquilt is null or empty"))
+	}
+}
+
+func TestVerlistpaper(t *testing.T) {
+	f.Verlistpaper = "1.20.4"
+	versionspaper, err := f.Arunpaperlist()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(versionspaper) == 0 {
+		t.Fatal(fmt.Errorf("versionspaper is null or empty"))
 	}
 }

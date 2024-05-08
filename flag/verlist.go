@@ -3,6 +3,7 @@ package flag
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/xmdhs/gomclauncher/download"
@@ -73,6 +74,26 @@ func (f *Flag) Arunquiltlist() ([]string, error) {
 		var versions []string
 		for _, v := range l.Versions {
 			versions = append(versions, v.Loader.Version)
+		}
+
+		return versions, nil
+	}
+
+	return nil, nil
+}
+
+func (f *Flag) Arunpaperlist() ([]string, error) {
+	_, err := semver.NewVersion(f.Verlistpaper)
+	if err != nil {
+		return nil, err
+	}
+
+	if f.Verlistpaper != "" {
+		l, err := download.Getpaperversionlist(context.Background(), f.Verlistpaper, f.Atype, func(s string) { fmt.Println(s) })
+		errr(err)
+		var versions []string
+		for _, v := range l.Json.Builds {
+			versions = append(versions, strconv.Itoa(v.Build))
 		}
 
 		return versions, nil

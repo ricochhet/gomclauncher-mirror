@@ -173,6 +173,7 @@ var mirror = map[string]map[string]string{
 		`https://maven.fabricmc.net`:                   `https://bmclapi2.bangbang93.com/maven`,
 		`https://meta.quiltmc.org`:                     `https://meta.quiltmc.org`,
 		`https://maven.quiltmc.org/repository/release`: `https://maven.quiltmc.org/repository/release`,
+		`https://api.papermc.io`:                       `https://api.papermc.io`,
 		// bmclapi quilt functionality is not active currently. . .
 		//`https://meta.quiltmc.org`:                     `https://bmclapi2.bangbang93.com/quilt-meta`,
 		//`https://maven.quiltmc.org/repository/release`: `https://bmclapi2.bangbang93.com/maven`,

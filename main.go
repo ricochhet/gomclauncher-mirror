@@ -54,10 +54,25 @@ func main() {
 		}
 		fmt.Println(strings.Join(v, "\n"))
 	}
+	if f.Verlistpaper != "" {
+		v, err := f.Arunpaperlist()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(strings.Join(v, "\n"))
+	}
 	if f.Runlist {
 		s := aflag.Find(launcher.Minecraft + `/versions`)
 		for _, v := range s {
 			if aflag.Test(launcher.Minecraft + `/versions/` + v + `/` + v + ".json") {
+				fmt.Println(v)
+			}
+		}
+	}
+	if f.Runlistpaper {
+		s := aflag.Find(launcher.Minecraft + `/servers`)
+		for _, v := range s {
+			if aflag.Test(launcher.Minecraft + `/servers/` + v + `/` + v + ".json") {
 				fmt.Println(v)
 			}
 		}
@@ -73,6 +88,10 @@ func main() {
 	if f.Downloadquilt != "" {
 		f.Outmsg = false
 		f.Dquilt()
+	}
+	if f.Downloadpaper != "" {
+		f.Outmsg = false
+		f.Dpaper()
 	}
 	if list {
 		f.Listname()
@@ -107,6 +126,9 @@ func main() {
 		} else {
 			f.Arun()
 		}
+	}
+	if f.Runpaper != "" {
+		f.Arunpaper()
 	}
 	if update {
 		check()
