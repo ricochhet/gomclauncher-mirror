@@ -28,14 +28,14 @@ func (g *Gameinfo) argumentsjvm(l *launcher1155) error {
 		case string:
 			g.jvmflagadd(v, l)
 		default:
-			return JsonNorTrue
+			return ErrJSONNorTrue
 		}
 	}
 	return nil
 }
 
 //lint:ignore ST1012 导出字段
-var JsonNorTrue = errors.New("json not true")
+var ErrJSONNorTrue = errors.New("json not true")
 
 func (g *Gameinfo) jvmflagadd(v string, l *launcher1155) {
 	flag := g.jvmflagrelace(v, l)
@@ -219,7 +219,6 @@ func (g *Gameinfo) legacy(l *launcher1155) error {
 	}
 
 	for path, v := range a.Objects {
-		path, v := path, v
 		group.Go(func() error {
 			copyPath := ""
 			if a.Virtual {
@@ -234,7 +233,7 @@ func (g *Gameinfo) legacy(l *launcher1155) error {
 				}
 			}
 			dir := filepath.Dir(copyPath)
-			err = os.MkdirAll(dir, 0777)
+			err = os.MkdirAll(dir, 0o777)
 			if err != nil {
 				return err
 			}
@@ -253,7 +252,6 @@ func (g *Gameinfo) legacy(l *launcher1155) error {
 			}
 			return nil
 		})
-
 	}
 
 	err = group.Wait()

@@ -1,0 +1,88 @@
+linters-settings:
+    mnd:
+        ignored-numbers:
+            - '0o600'
+            - '0o700'
+            - '0o644'
+    goimports:
+        local-prefixes: github.com/golang-templates/seed
+    govet:
+        shadow: true
+    nolintlint:
+        allow-unused: false # report any unused nolint directives
+        require-explanation: true # require an explanation for nolint directives
+        require-specific: false # don't require nolint directives to be specific about which linter is being skipped
+issues:
+    exclude-dirs:
+        - thirdparty/
+
+linters:
+    enable:
+        - asasalint
+        - asciicheck
+        - bidichk
+        - bodyclose
+        - contextcheck
+        - copyloopvar
+        - decorder
+        - dogsled
+        - dupword
+        - durationcheck
+        - errcheck
+        - errchkjson
+        - errorlint
+        - exhaustive
+        - exportloopref
+        - fatcontext
+        - gci
+        - ginkgolinter
+        - gocheckcompilerdirectives
+        - gochecksumtype
+        - gocritic
+        - godot
+        - godox
+        - gofmt
+        - gofumpt
+        - goheader
+        - goimports
+        - gomoddirectives
+        - gomodguard
+        - goprintffuncname
+        - gosimple
+        - govet
+        - grouper
+        - importas
+        - inamedparam
+        - ineffassign
+        - interfacebloat
+        - ireturn
+        - loggercheck
+        - maintidx
+        - makezero
+        - mirror
+        - nakedret
+        - nilerr
+        - nilnil
+        - noctx
+        - nolintlint
+        - nosprintfhostport
+        - prealloc
+        - promlinter
+        - protogetter
+        - reassign
+        - rowserrcheck
+        - sloglint
+        - spancheck
+        - sqlclosecheck
+        - staticcheck
+        - stylecheck
+        - tagalign
+        - tenv
+        - thelper
+        - typecheck
+        - unconvert
+        - unparam
+        - unused
+        - usestdlibvars
+        - whitespace
+        - zerologlint

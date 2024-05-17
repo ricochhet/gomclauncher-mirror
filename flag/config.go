@@ -17,30 +17,37 @@ func saveconfig(gmlconfig Gmlconfig) {
 	} else {
 		ff, err := os.Create("gml.json.bak")
 		aerr(err)
-		defer ff.Close()
+		defer func() {
+			if err := ff.Close(); err != nil {
+				panic(err)
+			}
+		}()
 		_, err = ff.Write(b)
 		aerr(err)
 	}
 	f, err := os.Create("gml.json")
 	aerr(err)
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			panic(err)
+		}
+	}()
 	b, err = json.Marshal(gmlconfig)
 	aerr(err)
 	_, err = f.Write(b)
 	aerr(err)
 }
 
-//lint:ignore ST1012 导出字段
-var HaveProfiles = errors.New("have")
+var ErrHaveProfiles = errors.New("have")
 
 func (c Config) setonline(gmlconfig *Gmlconfig, f *Flag) error {
-	if _, ok := (*gmlconfig)[f.ApiAddress][f.Email]; ok && f.Password == "" {
-		return HaveProfiles
+	if _, ok := (*gmlconfig)[f.APIAddress][f.Email]; ok && f.Password == "" {
+		return ErrHaveProfiles
 	}
 	if c.ClientToken == "" {
 		c.ClientToken = UUIDgen(f.Email)
 	}
-	a, err := auth.Authenticate(f.ApiAddress, f.Name, f.Email, f.Password, c.ClientToken)
+	a, err := auth.Authenticate(f.APIAddress, f.Name, f.Email, f.Password, c.ClientToken)
 	if err != nil {
 		if errors.Is(err, auth.ErrNotSelctProFile) {
 			fmt.Println(lang.Lang("ErrNotSelctProFile"))
@@ -60,7 +67,7 @@ func (c Config) setonline(gmlconfig *Gmlconfig, f *Flag) error {
 	aconfig.Name = a.Username
 	aconfig.UUID = a.ID
 	aconfig.AccessToken = a.AccessToken
-	(*gmlconfig)[f.ApiAddress][f.Email] = aconfig
+	(*gmlconfig)[f.APIAddress][f.Email] = aconfig
 	saveconfig(*gmlconfig)
 	return nil
 }

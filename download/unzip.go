@@ -20,7 +20,6 @@ func (l Libraries) Unzip(i int) error {
 	g.SetLimit(i)
 
 	for _, v := range l.librarie.Libraries {
-		v := v
 		path, sha1, url := swichnatives(v)
 		if url == "" {
 			continue
@@ -63,7 +62,7 @@ func (l Libraries) unzipnative(n []string) error {
 	if err != nil {
 		return fmt.Errorf("unzipnative: %w", err)
 	}
-	err = os.MkdirAll(p, 0777)
+	err = os.MkdirAll(p, 0o777)
 	if err != nil {
 		return fmt.Errorf("unzipnative: %w", err)
 	}
@@ -72,7 +71,6 @@ func (l Libraries) unzipnative(n []string) error {
 	g.SetLimit(8)
 
 	for _, v := range n {
-		v := v
 		g.Go(func() error {
 			return deCompress(v, p)
 		})
@@ -91,7 +89,11 @@ func deCompress(zipFile, dest string) error {
 	if err != nil {
 		return fmt.Errorf("DeCompress: %w", err)
 	}
-	defer reader.Close()
+	defer func() {
+		if err := reader.Close(); err != nil {
+			panic(err)
+		}
+	}()
 	for _, file := range reader.File {
 		if file.FileInfo().IsDir() {
 			continue
@@ -105,16 +107,21 @@ func deCompress(zipFile, dest string) error {
 				if err != nil {
 					return fmt.Errorf("DeCompress: %w", err)
 				}
-				defer rc.Close()
+				defer func() {
+					if err := rc.Close(); err != nil {
+						panic(err)
+					}
+				}()
 				filename := filepath.Join(dest, name)
-				if err != nil {
-					return fmt.Errorf("DeCompress: %w", err)
-				}
 				w, err := os.Create(filename)
 				if err != nil {
 					return fmt.Errorf("DeCompress: %w", err)
 				}
-				defer w.Close()
+				defer func() {
+					if err := w.Close(); err != nil {
+						panic(err)
+					}
+				}()
 				_, err = io.Copy(w, rc)
 				if err != nil {
 					return fmt.Errorf("DeCompress: %w", err)

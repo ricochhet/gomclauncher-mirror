@@ -39,9 +39,10 @@ func TestGetProfile(t *testing.T) {
 		want    *Profile
 		wantErr bool
 	}{
-		{name: "1", args: args{
-			Authorization: "",
-		},
+		{
+			name: "1", args: args{
+				Authorization: "",
+			},
 			wantErr: true,
 		},
 	}

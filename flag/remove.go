@@ -7,20 +7,20 @@ import (
 )
 
 func (f *Flag) Remove(ms bool) {
-	ApiAddress := f.ApiAddress
+	APIAddress := f.APIAddress
 	if ms {
-		ApiAddress = "ms"
+		APIAddress = "ms"
 	}
 	if f.Email == "" {
 		fmt.Println(lang.Lang("emailnil"))
 	}
-	if _, ok := f.Gmlconfig[ApiAddress][f.Email]; !ok {
-		fmt.Println(ApiAddress, f.Email, lang.Lang("nofind"))
+	if _, ok := f.Gmlconfig[APIAddress][f.Email]; !ok {
+		fmt.Println(APIAddress, f.Email, lang.Lang("nofind"))
 	} else {
-		delete(f.Gmlconfig[ApiAddress], f.Email)
-		fmt.Println(lang.Lang("removeok"), ApiAddress, f.Email)
-		if len(f.Gmlconfig[ApiAddress]) == 0 {
-			delete(f.Gmlconfig, ApiAddress)
+		delete(f.Gmlconfig[APIAddress], f.Email)
+		fmt.Println(lang.Lang("removeok"), APIAddress, f.Email)
+		if len(f.Gmlconfig[APIAddress]) == 0 {
+			delete(f.Gmlconfig, APIAddress)
 		}
 		saveconfig(f.Gmlconfig)
 	}

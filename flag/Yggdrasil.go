@@ -18,14 +18,14 @@ func (f *Flag) Authlib() {
 			panic(err)
 		}
 	}
-	api, err := auth.Getauthlibapi(f.ApiAddress)
+	api, err := auth.Getauthlibapi(f.APIAddress)
 	if err != nil {
-		if errors.Is(err, auth.JsonNotTrue) {
+		if errors.Is(err, auth.ErrJSONNotTrue) {
 			panic(lang.Lang("auth.JsonNotTrue"))
 		} else {
 			fmt.Println(lang.Lang("webfail"))
 			panic(err)
 		}
 	}
-	f.ApiAddress = api
+	f.APIAddress = api
 }

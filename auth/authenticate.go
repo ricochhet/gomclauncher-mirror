@@ -8,14 +8,14 @@ import (
 )
 
 var (
-	NotOk      = errors.New("not ok")
-	NoProfiles = errors.New("No Available Profiles")
+	ErrNotOk      = errors.New("not ok")
+	ErrNoProfiles = errors.New("no available profiles")
 )
 
-// Authenticate return accessToken, err
-func Authenticate(ApiAddress, username, email, password, clientToken string) (Auth, error) {
-	if ApiAddress == "" {
-		ApiAddress = "https://sessionserver.mojang.com"
+// Authenticate return accessToken, err.
+func Authenticate(apiAddress, username, email, password, clientToken string) (Auth, error) {
+	if apiAddress == "" {
+		apiAddress = "https://sessionserver.mojang.com"
 	}
 	a := authenticatePayload{
 		Agent: authenticateAgent{
@@ -29,16 +29,16 @@ func Authenticate(ApiAddress, username, email, password, clientToken string) (Au
 	}
 	b, err := json.Marshal(a)
 	Auth := Auth{}
-	Auth.ApiAddress = ApiAddress
+	Auth.APIAddress = apiAddress
 	if err != nil {
 		return Auth, fmt.Errorf("Authenticate: %w", err)
 	}
-	b, err, i := post(Auth.ApiAddress, "authenticate", b)
+	b, err, i := post(Auth.APIAddress, "authenticate", b)
 	if err != nil {
 		return Auth, fmt.Errorf("Authenticate: %w", err)
 	}
 	if i != http.StatusOK {
-		return Auth, NotOk
+		return Auth, ErrNotOk
 	}
 	auth := &authenticateResponse{}
 	if err = json.Unmarshal(b, auth); err != nil {
@@ -48,7 +48,7 @@ func Authenticate(ApiAddress, username, email, password, clientToken string) (Au
 	Auth.ClientToken = auth.ClientToken
 	Auth.availableProfiles = auth.AvailableProfiles
 	if len(Auth.availableProfiles) == 0 {
-		return Auth, NoProfiles
+		return Auth, ErrNoProfiles
 	}
 	if auth.SelectedProfile.Name == "" {
 		a, err := selectProfile(Auth.availableProfiles, username)
@@ -106,7 +106,7 @@ type Auth struct {
 	ID                string
 	AccessToken       string
 	selectedProfile   sElectedProfile
-	ApiAddress        string
+	APIAddress        string
 	availableProfiles []authenticateResponseAvailableProfile
 }
 

@@ -25,7 +25,7 @@ func serverjson(name, apath string) error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(apath+"/servers/"+name+"/"+name+".json", b, 0777)
+	err = os.WriteFile(apath+"/servers/"+name+"/"+name+".json", b, 0o777)
 	if err != nil {
 		return err
 	}

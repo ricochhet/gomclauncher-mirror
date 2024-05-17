@@ -16,25 +16,26 @@ func (f *Flag) Aonline() {
 		fmt.Println(lang.Lang("emailnil"))
 		os.Exit(0)
 	}
-	if f.Gmlconfig[f.ApiAddress] == nil {
-		f.Gmlconfig[f.ApiAddress] = make(map[string]Config)
+	if f.Gmlconfig[f.APIAddress] == nil {
+		f.Gmlconfig[f.APIAddress] = make(map[string]Config)
 	}
-	err := f.Gmlconfig[f.ApiAddress][f.Email].setonline(&f.Gmlconfig, f)
+	err := f.Gmlconfig[f.APIAddress][f.Email].setonline(&f.Gmlconfig, f)
 	if err != nil {
-		if errors.Is(err, HaveProfiles) {
+		switch err { //nolint:errorlint // ...
+		case ErrHaveProfiles:
 			a := auth.Auth{
-				AccessToken: f.Gmlconfig[f.ApiAddress][f.Email].AccessToken,
-				ClientToken: f.Gmlconfig[f.ApiAddress][f.Email].ClientToken,
-				ApiAddress:  f.ApiAddress,
-				Username:    f.Gmlconfig[f.ApiAddress][f.Email].Name,
-				ID:          f.Gmlconfig[f.ApiAddress][f.Email].UUID,
+				AccessToken: f.Gmlconfig[f.APIAddress][f.Email].AccessToken,
+				ClientToken: f.Gmlconfig[f.APIAddress][f.Email].ClientToken,
+				APIAddress:  f.APIAddress,
+				Username:    f.Gmlconfig[f.APIAddress][f.Email].Name,
+				ID:          f.Gmlconfig[f.APIAddress][f.Email].UUID,
 			}
 			atime := time.Now().Unix()
-			if atime-f.Gmlconfig[f.ApiAddress][f.Email].Time > 120 {
+			if atime-f.Gmlconfig[f.APIAddress][f.Email].Time > 120 {
 				if err := auth.Validate(a); err != nil {
 					err = auth.Refresh(&a)
 					if err != nil {
-						if errors.Is(err, auth.NotOk) {
+						if errors.Is(err, auth.ErrNotOk) {
 							fmt.Println(lang.Lang("auth.NotOk-refresh"))
 							os.Exit(0)
 						} else {
@@ -43,40 +44,41 @@ func (f *Flag) Aonline() {
 							os.Exit(0)
 						}
 					}
-					aconfig := f.Gmlconfig[f.ApiAddress][f.Email]
+					aconfig := f.Gmlconfig[f.APIAddress][f.Email]
 					aconfig.Name = a.Username
 					aconfig.UUID = a.ID
 					aconfig.AccessToken = a.AccessToken
 					aconfig.Time = time.Now().Unix()
 					aconfig.ClientToken = a.ClientToken
-					f.Gmlconfig[f.ApiAddress][f.Email] = aconfig
+					f.Gmlconfig[f.APIAddress][f.Email] = aconfig
 					saveconfig(f.Gmlconfig)
 				}
 			}
-		} else if errors.Is(err, auth.NotOk) {
+		case auth.ErrNotOk:
 			fmt.Println(lang.Lang("auth.NotOk"))
 			os.Exit(0)
-		} else {
+		default:
 			panic(err)
 		}
 	}
-	if f.Gmlconfig[f.ApiAddress][f.Email].Name == "" {
+	if f.Gmlconfig[f.APIAddress][f.Email].Name == "" {
 		fmt.Println(lang.Lang("namenil"))
 		os.Exit(0)
 	}
-	f.AccessToken = f.Gmlconfig[f.ApiAddress][f.Email].AccessToken
-	f.Name = f.Gmlconfig[f.ApiAddress][f.Email].Name
-	f.UUID = f.Gmlconfig[f.ApiAddress][f.Email].UUID
+	f.AccessToken = f.Gmlconfig[f.APIAddress][f.Email].AccessToken
+	f.Name = f.Gmlconfig[f.APIAddress][f.Email].Name
+	f.UUID = f.Gmlconfig[f.APIAddress][f.Email].UUID
 }
 
 func (f *Flag) Listname() {
 	fmt.Println("-----------------")
 	for k, v := range f.Gmlconfig {
-		if k == "https://sessionserver.mojang.com" {
+		switch k {
+		case "https://sessionserver.mojang.com":
 			fmt.Println(lang.Lang("minecraftlogin"))
-		} else if k == "ms" {
+		case "ms":
 			fmt.Println(lang.Lang("mslogin"))
-		} else {
+		default:
 			fmt.Println(lang.Lang("authlib-injectorlogin"), k)
 		}
 		for k, v := range v {

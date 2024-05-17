@@ -2,14 +2,6 @@ package launcher
 
 type Quiltjsonv3 quiltv3Version
 
-type quiltv3Profile struct {
-	ID        string           `json:"id"`
-	Type      string           `json:"type"`
-	MainClass string           `json:"mainClass"`
-	Arguments argumentsX115    `json:"arguments"`
-	Libraries []quiltv3Library `json:"libraries"`
-}
-
 type quiltv3Loader struct {
 	Separator string `json:"separator"`
 	Build     int    `json:"build"`

@@ -13,7 +13,9 @@ import (
 
 func TestNewlibraries(t *testing.T) {
 	t.Cleanup(func() {
-		os.RemoveAll(".minecraft")
+		if err := os.RemoveAll(".minecraft"); err != nil {
+			t.Fatal(err)
+		}
 	})
 	b, err := os.ReadFile("1.15.2.json")
 	if err != nil {
@@ -30,7 +32,6 @@ func TestNewlibraries(t *testing.T) {
 		if err != nil {
 			e <- err
 		}
-
 	}()
 b:
 	for {
@@ -39,7 +40,7 @@ b:
 			if !ok {
 				break b
 			}
-			//fmt.Println(i)
+			// fmt.Println(i)
 		case err := <-e:
 			t.Fatal(err)
 			break b
@@ -72,7 +73,6 @@ func TestDownassets(t *testing.T) {
 		if err != nil {
 			e <- err
 		}
-
 	}()
 b:
 	for {
@@ -81,7 +81,7 @@ b:
 			if !ok {
 				break b
 			}
-			//fmt.Println(i)
+			// fmt.Println(i)
 		case err := <-e:
 			t.Fatal(err)
 			break b

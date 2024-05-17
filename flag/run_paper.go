@@ -35,7 +35,7 @@ func (f *Flag) Arunpaper() {
 			if err != nil {
 				panic(err)
 			}
-			err := os.WriteFile(f.Minecraftpath+"/servers/"+f.Version+"/"+f.Version+".json", b, 0777)
+			err := os.WriteFile(f.Minecraftpath+"/servers/"+f.Version+"/"+f.Version+".json", b, 0o777)
 			if err != nil {
 				panic(err)
 			}
@@ -53,11 +53,11 @@ func (f *Flag) Arunpaper() {
 			fmt.Println(lang.Lang("flag.os.ErrNotExist"))
 			os.Exit(0)
 		}
-		if errors.Is(err, launcher.JsonErr) {
+		if errors.Is(err, launcher.ErrJSON) {
 			fmt.Printf(lang.Lang("launcher.JsonErr"), launcher.Minecraft)
 			os.Exit(0)
 		}
-		if errors.Is(err, launcher.JsonNorTrue) {
+		if errors.Is(err, launcher.ErrJSONNorTrue) {
 			fmt.Println(lang.Lang("launcher.JsonNorTrue"))
 			os.Exit(0)
 		}

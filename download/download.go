@@ -40,7 +40,6 @@ func (l Libraries) Downassets(i int, c chan int) error {
 	})
 
 	for _, v := range assetList {
-		v := v
 		g.Go(func() error {
 			ok := ver(l.path+`/assets/objects/`+v.Hash[:2]+`/`+v.Hash, v.Hash)
 			if !ok {
@@ -84,7 +83,11 @@ func ver(path, ahash string) bool {
 		if err != nil {
 			return false
 		}
-		defer file.Close()
+		defer func() {
+			if err := file.Close(); err != nil {
+				panic(err)
+			}
+		}()
 		if _, err := io.Copy(m, file); err != nil {
 			return false
 		}
@@ -109,7 +112,6 @@ func (l Libraries) Downlibrarie(i int, c chan int) error {
 	})
 
 	for _, v := range librarieL {
-		v := v
 		if !launcher.Ifallow(v) {
 			c <- len(librarieL) - int(n.Add(1))
 			continue
@@ -147,13 +149,12 @@ func (l Libraries) Downlibrarie(i int, c chan int) error {
 	return nil
 }
 
-//lint:ignore ST1012 导出字段
-var FileDownLoadFail = errors.New("file download fail")
+var ErrFileDownLoadFail = errors.New("file download fail")
 
 func (l Libraries) Downjar(version string) error {
 	path, err := internal.SafePathJoin(l.path, `/versions/`, version, version+".jar")
 	if err != nil {
-		return fmt.Errorf("Downjar: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downjar: %w %w", err, ErrFileDownLoadFail)
 	}
 	if ver(path, l.librarie.Downloads.Client.Sha1) {
 		return nil
@@ -176,7 +177,7 @@ func (l Libraries) Downjar(version string) error {
 		l.print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
 	if err != nil {
-		return fmt.Errorf("Downjar: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downjar: %w %w", err, ErrFileDownLoadFail)
 	}
 	return nil
 }
@@ -184,7 +185,7 @@ func (l Libraries) Downjar(version string) error {
 func (l Libraries) Downmappings(version string) error {
 	path, err := internal.SafePathJoin(l.path, `/versions/`, version, version+"-mappings.txt")
 	if err != nil {
-		return fmt.Errorf("Downmappings: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downmappings: %w %w", err, ErrFileDownLoadFail)
 	}
 	if ver(path, l.librarie.Downloads.ClientMappings.Sha1) {
 		return nil
@@ -207,7 +208,7 @@ func (l Libraries) Downmappings(version string) error {
 		l.print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
 	if err != nil {
-		return fmt.Errorf("Downmappings: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downmappings: %w %w", err, ErrFileDownLoadFail)
 	}
 	return nil
 }
@@ -239,7 +240,7 @@ func (d downinfo) down(ctx context.Context) error {
 		print(fmt.Sprintf("retry %d: %v\n", n, err))
 	}))...)
 	if err != nil {
-		return errors.Join(err, FileDownLoadFail)
+		return errors.Join(err, ErrFileDownLoadFail)
 	}
 	d.add(f)
 	return nil

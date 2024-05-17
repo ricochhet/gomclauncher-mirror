@@ -27,7 +27,11 @@ func Getquiltversionlist(cxt context.Context, version, atype string, print func(
 		url := source(`https://meta.quiltmc.org/v3/versions/loader/`+version, f)
 		rep, _, err := Aget(cxt, url)
 		if rep != nil {
-			defer rep.Body.Close()
+			defer func() {
+				if err := rep.Body.Close(); err != nil {
+					panic(err)
+				}
+			}()
 		}
 		if err != nil {
 			f = r.fail(f)
@@ -43,7 +47,7 @@ func Getquiltversionlist(cxt context.Context, version, atype string, print func(
 		print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
 	if err != nil {
-		return nil, fmt.Errorf("Getquiltversionlist: %w %w", err, FileDownLoadFail)
+		return nil, fmt.Errorf("Getquiltversionlist: %w %w", err, ErrFileDownLoadFail)
 	}
 
 	v := Quiltjsonv3{}
@@ -79,10 +83,10 @@ func (v Quiltjsonv3) Downquiltjson(cxt context.Context, version, apath string, p
 				print(fmt.Sprintf("retry %d: %v", n, err))
 			}))...)
 			if err != nil {
-				return fmt.Errorf("Downquiltjson: %w %w", err, FileDownLoadFail)
+				return fmt.Errorf("Downquiltjson: %w %w", err, ErrFileDownLoadFail)
 			}
 			return nil
 		}
 	}
-	return NoSuch
+	return ErrNoSuch
 }

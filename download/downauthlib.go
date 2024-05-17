@@ -14,13 +14,13 @@ import (
 )
 
 func Downauthlib(cxt context.Context, print func(string)) (err error) {
-	var path = ".minecraft/libraries/moe/yushi/authlibinjector/authlib-injector/authlib-injector.jar"
+	path := ".minecraft/libraries/moe/yushi/authlibinjector/authlib-injector/authlib-injector.jar"
 	url := ""
 
 	err = retry.Do(func() error {
 		url = randAuthlibUrls(url)
 		var d, h string
-		d, h, err = getAuthlibLatestUrl(cxt, url)
+		d, h, err = getAuthlibLatestURL(cxt, url)
 		if err != nil {
 			return fmt.Errorf("%v %w %v", lang.Lang("authlibdownloadfail"), err, url)
 		}
@@ -38,9 +38,8 @@ func Downauthlib(cxt context.Context, print func(string)) (err error) {
 	}, append(retryOpts, retry.OnRetry(func(n uint, err error) {
 		print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
-
 	if err != nil {
-		return fmt.Errorf("Downauthlib: %w", errors.Join(err, FileDownLoadFail))
+		return fmt.Errorf("Downauthlib: %w", errors.Join(err, ErrFileDownLoadFail))
 	}
 	return nil
 }
@@ -63,22 +62,26 @@ func randAuthlibUrls(url string) string {
 	return u
 }
 
-func getAuthlibLatestUrl(cxt context.Context, url string) (downloadURL string, hash string, err error) {
+func getAuthlibLatestURL(cxt context.Context, url string) (downloadURL string, hash string, err error) {
 	reps, _, err := Aget(cxt, url)
 	if reps != nil {
-		defer reps.Body.Close()
+		defer func() {
+			if err := reps.Body.Close(); err != nil {
+				panic(err)
+			}
+		}()
 	}
 	if err != nil {
-		return "", "", fmt.Errorf("getAuthlibLatestUrl: %w", err)
+		return "", "", fmt.Errorf("getAuthlibLatestURL: %w", err)
 	}
 	b, err := io.ReadAll(reps.Body)
 	if err != nil {
-		return "", "", fmt.Errorf("getAuthlibLatestUrl: %w", err)
+		return "", "", fmt.Errorf("getAuthlibLatestURL: %w", err)
 	}
 	adata := authlibData{}
 	err = json.Unmarshal(b, &adata)
 	if err != nil {
-		return "", "", fmt.Errorf("getAuthlibLatestUrl: %w", err)
+		return "", "", fmt.Errorf("getAuthlibLatestURL: %w", err)
 	}
 	return adata.DownloadURL, adata.Checksums.Sha256, nil
 }

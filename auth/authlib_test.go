@@ -13,7 +13,7 @@ func TestGetauthlibapi(t *testing.T) {
 		wantErr        bool
 	}{
 		{name: "1", args: args{api: "skin.xmdhs.com/"}, wantApiaddress: "https://skin.xmdhs.com/api/yggdrasil/", wantErr: false},
-		//{name: "2", args: args{api: "skin.jingqingg.com"}, wantApiaddress: "https://skin.jingqingg.com/api/yggdrasil", wantErr: false},
+		// {name: "2", args: args{api: "skin.jingqingg.com"}, wantApiaddress: "https://skin.jingqingg.com/api/yggdrasil", wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

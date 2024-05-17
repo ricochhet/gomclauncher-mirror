@@ -12,7 +12,7 @@ import (
 func (l Libraries) Downserverjar(version string) error {
 	path, err := internal.SafePathJoin(l.path, `/servers/`, version, version+".jar")
 	if err != nil {
-		return fmt.Errorf("Downserverjar: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downserverjar: %w %w", err, ErrFileDownLoadFail)
 	}
 	if ver(path, l.librarie.Downloads.Server.Sha1) {
 		return nil
@@ -35,7 +35,7 @@ func (l Libraries) Downserverjar(version string) error {
 		l.print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
 	if err != nil {
-		return fmt.Errorf("Downserverjar: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downserverjar: %w %w", err, ErrFileDownLoadFail)
 	}
 	err = Newserverjson(version, launcher.Minecraft)
 	if err != nil {
@@ -47,7 +47,7 @@ func (l Libraries) Downserverjar(version string) error {
 func (l Libraries) Downservermappings(version string) error {
 	path, err := internal.SafePathJoin(l.path, `/servers/`, version, version+"-mappings.txt")
 	if err != nil {
-		return fmt.Errorf("Downservermappings: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downservermappings: %w %w", err, ErrFileDownLoadFail)
 	}
 	if ver(path, l.librarie.Downloads.ServerMappings.Sha1) {
 		return nil
@@ -70,7 +70,7 @@ func (l Libraries) Downservermappings(version string) error {
 		l.print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
 	if err != nil {
-		return fmt.Errorf("Downservermappings: %w %w", err, FileDownLoadFail)
+		return fmt.Errorf("Downservermappings: %w %w", err, ErrFileDownLoadFail)
 	}
 	return nil
 }

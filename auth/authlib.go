@@ -12,13 +12,13 @@ import (
 )
 
 const (
-	// Deprecated: move to package download
+	// Deprecated: move to package download.
 	Authlibversion = "1.1.41"
-	// Deprecated: move to package download
+	// Deprecated: move to package download.
 	Authlibsha1 = "64e96fc1e29e312a4d1e9d530f492cfa4b089cf1"
 )
 
-// Deprecated: move to package download
+// Deprecated: move to package download.
 var Authliburls = []string{
 	"https://authlib-injector.yushi.moe/artifact/41/authlib-injector-1.1.41.jar",
 	"https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/41/authlib-injector-1.1.41.jar",
@@ -33,9 +33,13 @@ func Getauthlibapi(api string) (apiaddress string, err error) {
 		u.Scheme = "https"
 		api = u.String()
 	}
-	reps, _, err := internal.HttpGet(context.TODO(), api, Transport, nil)
+	reps, _, err := internal.HTTPGet(context.TODO(), api, Transport, nil)
 	if reps != nil {
-		defer reps.Body.Close()
+		defer func() {
+			if err := reps.Body.Close(); err != nil {
+				panic(err)
+			}
+		}()
 	}
 	if err != nil {
 		return "", fmt.Errorf("Getauthlibapi: %w", err)
@@ -67,9 +71,13 @@ type yggdrasil struct {
 }
 
 func checkapi(url string) error {
-	reps, _, err := internal.HttpGet(context.TODO(), url, Transport, nil)
+	reps, _, err := internal.HTTPGet(context.TODO(), url, Transport, nil)
 	if reps != nil {
-		defer reps.Body.Close()
+		defer func() {
+			if err := reps.Body.Close(); err != nil {
+				panic(err)
+			}
+		}()
 	}
 	if err != nil {
 		return fmt.Errorf("checkapi: %w", err)
@@ -84,9 +92,9 @@ func checkapi(url string) error {
 		return fmt.Errorf("checkapi: %w", err)
 	}
 	if y.SignaturePublickey == "" {
-		return fmt.Errorf("checkapi: %w", JsonNotTrue)
+		return fmt.Errorf("checkapi: %w", ErrJSONNotTrue)
 	}
 	return nil
 }
 
-var JsonNotTrue = errors.New("json not true")
+var ErrJSONNotTrue = errors.New("json not true")

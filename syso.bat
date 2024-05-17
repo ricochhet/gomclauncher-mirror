@@ -1,1 +1,0 @@
-windres gomclauncher.rc -O coff -o gomclauncher.syso

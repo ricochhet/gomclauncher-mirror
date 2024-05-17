@@ -13,7 +13,6 @@ import (
 )
 
 func (f *Flag) Dfabric() {
-
 	cxt := context.TODO()
 	var err error
 	var ver string
@@ -38,13 +37,10 @@ func (f *Flag) Dfabric() {
 		}
 		ver = f.Download
 	}
-	if err != nil {
-		panic(err)
-	}
 	l, err := download.Getfabricversionlist(cxt, ver, f.Atype, func(s string) { fmt.Println(s) })
 	errr(err)
 	err = l.Downfabricjson(cxt, f.Downloadfabric, launcher.Minecraft, func(s string) { fmt.Println(s) })
-	if !(f.Run != "" && err != nil && errors.Is(err, download.NoSuch)) {
+	if !(f.Run != "" && err != nil && errors.Is(err, download.ErrNoSuch)) {
 		errr(err)
 	}
 	if err != nil {

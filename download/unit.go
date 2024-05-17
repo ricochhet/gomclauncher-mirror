@@ -34,7 +34,7 @@ func librarie2LibraryX115(l *launcher.Librarie) *launcher.LibraryX115 {
 	if l.Downloads.Artifact.URL != "" {
 		return &Librarie
 	} else {
-		launcher.FullLibraryX115(&Librarie, l.Url)
+		launcher.FullLibraryX115(&Librarie, l.URL)
 		return &Librarie
 	}
 }

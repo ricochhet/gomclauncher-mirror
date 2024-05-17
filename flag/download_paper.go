@@ -36,7 +36,7 @@ func (f *Flag) Dpaper() {
 	dlver, err := download.Getversionlist(cxt, f.Atype, func(s string) { fmt.Println(s) })
 	errr(err)
 	err = dlver.Downjson(cxt, ver, launcher.Minecraft, func(s string) { fmt.Println(s) })
-	if !(f.Runpaper != "" && err != nil && errors.Is(err, download.NoSuch)) {
+	if !(f.Runpaper != "" && err != nil && errors.Is(err, download.ErrNoSuch)) {
 		errr(err)
 	}
 	_, err = os.Stat(launcher.Minecraft + "/versions/" + ver + "/" + ver + ".json")
@@ -46,7 +46,7 @@ func (f *Flag) Dpaper() {
 	dlpaper, err := download.Getpaperversionlist(cxt, ver, f.Atype, func(s string) { fmt.Println(s) })
 	errr(err)
 	err = dlpaper.Downpaperjar(cxt, verpaper, launcher.Minecraft, func(s string) { fmt.Println(s) })
-	if !(f.Run != "" && err != nil && errors.Is(err, download.NoSuch)) {
+	if !(f.Run != "" && err != nil && errors.Is(err, download.ErrNoSuch)) {
 		errr(err)
 	}
 	if err != nil {

@@ -22,7 +22,11 @@ func Getversionlist(cxt context.Context, atype string, print func(string)) (*ver
 		url := source(`https://piston-meta.mojang.com/mc/game/version_manifest.json`, f)
 		rep, _, err := Aget(cxt, url)
 		if rep != nil {
-			defer rep.Body.Close()
+			defer func() {
+				if err := rep.Body.Close(); err != nil {
+					panic(err)
+				}
+			}()
 		}
 		if err != nil {
 			f = r.fail(f)
@@ -38,7 +42,7 @@ func Getversionlist(cxt context.Context, atype string, print func(string)) (*ver
 		print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
 	if err != nil {
-		return nil, fmt.Errorf("Getversionlist: %w %w", err, FileDownLoadFail)
+		return nil, fmt.Errorf("Getversionlist: %w %w", err, ErrFileDownLoadFail)
 	}
 	v := version{}
 	err = json.Unmarshal(b, &v)
@@ -98,16 +102,15 @@ func (v version) Downjson(cxt context.Context, version, apath string, print func
 				print(fmt.Sprintf("retry %d: %v", n, err))
 			}))...)
 			if err != nil {
-				return fmt.Errorf("Downjson: %w %w", err, FileDownLoadFail)
+				return fmt.Errorf("Downjson: %w %w", err, ErrFileDownLoadFail)
 			}
 			return nil
 		}
 	}
-	return NoSuch
+	return ErrNoSuch
 }
 
 var (
-	//lint:ignore ST1012 导出字段
-	NoSuch         = errors.New("no such")
+	ErrNoSuch      = errors.New("no such")
 	ErrFileChecker = errors.New("file checker")
 )

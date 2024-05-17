@@ -53,7 +53,7 @@ func (f *Flag) D() {
 	l, err := download.Getversionlist(cxt, f.Atype, func(s string) { fmt.Println(s) })
 	errr(err)
 	err = l.Downjson(cxt, f.Download, launcher.Minecraft, func(s string) { fmt.Println(s) })
-	if !(f.Run != "" && err != nil && errors.Is(err, download.NoSuch)) {
+	if !(f.Run != "" && err != nil && errors.Is(err, download.ErrNoSuch)) {
 		errr(err)
 	}
 	var b []byte
@@ -153,9 +153,9 @@ b:
 func errr(err error) {
 	if err != nil {
 		switch {
-		case errors.Is(err, download.NoSuch):
+		case errors.Is(err, download.ErrNoSuch):
 			fmt.Println(lang.Lang("download.NoSuch"))
-		case errors.Is(err, download.FileDownLoadFail):
+		case errors.Is(err, download.ErrFileDownLoadFail):
 			fmt.Println(lang.Lang("download.FileDownLoadFail"))
 		default:
 			panic(err)

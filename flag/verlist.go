@@ -92,7 +92,7 @@ func (f *Flag) Arunpaperlist() ([]string, error) {
 		l, err := download.Getpaperversionlist(context.Background(), f.Verlistpaper, f.Atype, func(s string) { fmt.Println(s) })
 		errr(err)
 		var versions []string
-		for _, v := range l.Json.Builds {
+		for _, v := range l.JSON.Builds {
 			versions = append(versions, strconv.Itoa(v.Build))
 		}
 

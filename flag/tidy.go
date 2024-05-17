@@ -18,7 +18,7 @@ func (f *Flag) Tidy() {
 		}
 	}
 
-	//librariesMap := map[string]struct{}{}
+	// librariesMap := map[string]struct{}{}
 
 	assetsMap := map[string]struct{}{}
 
@@ -114,7 +114,7 @@ func removeFile(err error, d fs.DirEntry, m map[string]struct{}, path string) er
 		}
 		return nil
 	}
-	_, ok := m[filepath.Join(path)]
+	_, ok := m[filepath.Join(path)] //nolint:gocritic // ...
 	if !ok {
 		err := os.Remove(path)
 		if err != nil {

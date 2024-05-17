@@ -20,5 +20,4 @@ func TestSafePathJoin(t *testing.T) {
 
 	_, err = SafePathJoin("Z:/game/.minecraft/assets/virtual/legacy/", "records/11.ogg")
 	assert.Nil(t, err)
-
 }

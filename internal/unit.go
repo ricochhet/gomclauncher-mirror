@@ -38,14 +38,14 @@ func init() {
 	GitHash = hash
 }
 
-func HttpGet(cxt context.Context, aurl string, t *http.Transport, header http.Header) (*http.Response, *time.Timer, error) {
+func HTTPGet(cxt context.Context, aurl string, t *http.Transport, header http.Header) (*http.Response, *time.Timer, error) {
 	ctx, cancel := context.WithCancel(cxt)
-	rep, err := http.NewRequestWithContext(ctx, "GET", aurl, nil)
+	rep, err := http.NewRequestWithContext(ctx, http.MethodGet, aurl, nil)
 	timer := time.AfterFunc(5*time.Second, func() {
 		cancel()
 	})
 	if err != nil {
-		return nil, nil, fmt.Errorf("HttpGet: %w", err)
+		return nil, nil, fmt.Errorf("HTTPGet: %w", err)
 	}
 	if header != nil {
 		rep.Header = header
@@ -57,7 +57,7 @@ func HttpGet(cxt context.Context, aurl string, t *http.Transport, header http.He
 	}
 	reps, err := c.Do(rep)
 	if err != nil {
-		return reps, nil, fmt.Errorf("HttpGet: %w", err)
+		return reps, nil, fmt.Errorf("HTTPGet: %w", err)
 	}
 	return reps, timer, nil
 }

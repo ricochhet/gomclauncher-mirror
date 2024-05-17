@@ -2,16 +2,6 @@ package launcher
 
 type Fabricjsonv2 fabricv2Version
 
-type fabricv2Profile struct {
-	ID          string            `json:"id"`
-	ReleaseTime string            `json:"releaseTime"`
-	Time        string            `json:"time"`
-	Type        string            `json:"type"`
-	MainClass   string            `json:"mainClass"`
-	Arguments   argumentsX115     `json:"arguments"`
-	Libraries   []fabricv2Library `json:"libraries"`
-}
-
 type fabricv2Loader struct {
 	Separator string `json:"separator"`
 	Build     int    `json:"build"`

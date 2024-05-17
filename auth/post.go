@@ -2,6 +2,7 @@ package auth
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"fmt"
 	"io"
@@ -16,14 +17,16 @@ func init() {
 	Transport.TLSClientConfig = &tls.Config{
 		Renegotiation: tls.RenegotiateOnceAsClient,
 	}
-	//microsoft auth neet this
+	// microsoft auth neet this
 }
 
-func post(ApiAddress, endpoint string, Payload []byte) ([]byte, error, int) {
+//lint:ignore ST1008 // ...
+//nolint:stylecheck // ...
+func post(apiAddress, endpoint string, payload []byte) ([]byte, error, int) {
 	var api string
-	if ApiAddress != "https://sessionserver.mojang.com" {
+	if apiAddress != "https://sessionserver.mojang.com" {
 		var err error
-		api, err = url.JoinPath(ApiAddress, "/authserver")
+		api, err = url.JoinPath(apiAddress, "/authserver")
 		if err != nil {
 			return nil, fmt.Errorf("post: %w", err), 0
 		}
@@ -31,7 +34,7 @@ func post(ApiAddress, endpoint string, Payload []byte) ([]byte, error, int) {
 	if api == "" {
 		api = "https://sessionserver.mojang.com"
 	}
-	h, err := http.NewRequest("POST", api+"/"+endpoint, bytes.NewReader(Payload))
+	h, err := http.NewRequestWithContext(context.TODO(), http.MethodPost, api+"/"+endpoint, bytes.NewReader(payload))
 	if err != nil {
 		return nil, fmt.Errorf("post: %w", err), 0
 	}
@@ -44,7 +47,11 @@ func post(ApiAddress, endpoint string, Payload []byte) ([]byte, error, int) {
 	}
 	rep, err := c.Do(h)
 	if rep != nil {
-		defer rep.Body.Close()
+		defer func() {
+			if err := rep.Body.Close(); err != nil {
+				panic(err)
+			}
+		}()
 	}
 	if err != nil {
 		return nil, fmt.Errorf("post: %w", err), 0

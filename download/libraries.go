@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -69,7 +70,7 @@ func Newlibraries(cxt context.Context, b []byte, typee string, print func(string
 		return Libraries{}, fmt.Errorf("Newlibraries: %w", err)
 	}
 	if !ver(path, l.AssetIndex.Sha1) {
-		err := assetsjson(cxt, r, url, path, typee, l.AssetIndex.Sha1, print)
+		err := assetsjson(cxt, r, url, path, l.AssetIndex.Sha1, print)
 		if err != nil {
 			return Libraries{}, fmt.Errorf("Newlibraries: %w", err)
 		}
@@ -107,16 +108,20 @@ func get(cxt context.Context, u, path string) error {
 	if err != nil {
 		return fmt.Errorf("get: %w", err)
 	}
-	defer reps.Body.Close()
+	defer func() {
+		if err := reps.Body.Close(); err != nil {
+			panic(err)
+		}
+	}()
 	defer timer.Stop()
 
-	if reps.StatusCode != 200 {
+	if reps.StatusCode != http.StatusOK {
 		return fmt.Errorf("get: %w", &ErrHTTPCode{code: reps.StatusCode})
 	}
 	_, err = os.Stat(path)
 	if err != nil {
 		dir, _ := filepath.Split(path)
-		err := os.MkdirAll(dir, 0777)
+		err := os.MkdirAll(dir, 0o777)
 		if err != nil {
 			return fmt.Errorf("get: %w", err)
 		}
@@ -125,12 +130,16 @@ func get(cxt context.Context, u, path string) error {
 	if err != nil {
 		return fmt.Errorf("get: %w", err)
 	}
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			panic(err)
+		}
+	}()
 	bw := bufio.NewWriter(f)
 	for {
 		timer.Reset(5 * time.Second)
 		i, err := io.CopyN(bw, reps.Body, 100000)
-		if err != nil && err != io.EOF {
+		if err != nil && !errors.Is(err, io.EOF) {
 			return fmt.Errorf("get: %w", err)
 		}
 		if i == 0 {
@@ -152,10 +161,10 @@ func (e *ErrHTTPCode) Error() string {
 	return fmt.Sprintf("http code: %d", e.code)
 }
 
-func modlibraries2(l []launcher.Librarie, Launcherjson *launcher.LauncherjsonX115) {
+func modlibraries2(l []launcher.Librarie, launcherjson *launcher.LauncherjsonX115) {
 	for _, v := range l {
 		l := librarie2LibraryX115(&v)
-		Launcherjson.Libraries = append(Launcherjson.Libraries, *l)
+		launcherjson.Libraries = append(launcherjson.Libraries, *l)
 	}
 }
 
@@ -175,8 +184,8 @@ var mirror = map[string]map[string]string{
 		`https://maven.quiltmc.org/repository/release`: `https://maven.quiltmc.org/repository/release`,
 		`https://api.papermc.io`:                       `https://api.papermc.io`,
 		// bmclapi quilt functionality is not active currently. . .
-		//`https://meta.quiltmc.org`:                     `https://bmclapi2.bangbang93.com/quilt-meta`,
-		//`https://maven.quiltmc.org/repository/release`: `https://bmclapi2.bangbang93.com/maven`,
+		// `https://meta.quiltmc.org`:                     `https://bmclapi2.bangbang93.com/quilt-meta`,
+		// `https://maven.quiltmc.org/repository/release`: `https://bmclapi2.bangbang93.com/maven`,
 	},
 }
 
@@ -193,10 +202,10 @@ func source(url, types string) string {
 }
 
 func Aget(cxt context.Context, aurl string) (*http.Response, *time.Timer, error) {
-	return internal.HttpGet(cxt, aurl, auth.Transport, nil)
+	return internal.HTTPGet(cxt, aurl, auth.Transport, nil)
 }
 
-func assetsjson(cxt context.Context, r *randurls, url, path, typee, sha1 string, print func(string)) error {
+func assetsjson(cxt context.Context, r *randurls, url, path, sha1 string, print func(string)) error {
 	_, f := r.auto()
 
 	err := retry.Do(func() error {

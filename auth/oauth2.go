@@ -21,7 +21,7 @@ type MsToken struct {
 	ExpiresIn time.Time
 }
 
-// Deprecated: use Refresh
+// Deprecated: use Refresh.
 func (m *MsToken) Expires() bool {
 	return time.Now().After(m.ExpiresIn)
 }
@@ -49,11 +49,11 @@ func (m *MsToken) parse(mm msToken) {
 	m.msToken = mm
 }
 
-type ErrHttpCode struct {
+type ErrHTTPCode struct {
 	code int
 	msg  string
 }
 
-func (e ErrHttpCode) Error() string {
+func (e ErrHTTPCode) Error() string {
 	return "http code: " + strconv.Itoa(e.code) + " msg: " + e.msg
 }

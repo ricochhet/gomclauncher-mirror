@@ -55,7 +55,9 @@ func Test_get(t *testing.T) {
 		t.Fatal(err)
 		return
 	}
-	os.RemoveAll("test")
+	if err := os.RemoveAll("test"); err != nil {
+		t.Fatal(err)
+	}
 }
 
 func Test_source(t *testing.T) {

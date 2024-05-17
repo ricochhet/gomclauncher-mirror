@@ -26,12 +26,12 @@ func Refresh(a *Auth) error {
 	if err != nil {
 		return fmt.Errorf("Refresh: %w", err)
 	}
-	b, err, i := post(a.ApiAddress, "refresh", b)
+	b, err, i := post(a.APIAddress, "refresh", b)
 	if err != nil {
 		return fmt.Errorf("Refresh: %w", err)
 	}
 	if i != http.StatusOK {
-		return NotOk
+		return ErrNotOk
 	}
 	r := refreshs{}
 	err = json.Unmarshal(b, &r)
@@ -68,14 +68,14 @@ func Validate(a Auth) error {
 	if err != nil {
 		return fmt.Errorf("Validate: %w", err)
 	}
-	_, err, i := post(a.ApiAddress, "validate", b)
+	_, err, i := post(a.APIAddress, "validate", b)
 	if err != nil {
 		return fmt.Errorf("Validate: %w", err)
 	}
 	if i == 204 {
 		return nil
 	}
-	return AccessTokenCanNotUse
+	return ErrAccessTokenCanNotUse
 }
 
-var AccessTokenCanNotUse = errors.New("accessToken is can not use")
+var ErrAccessTokenCanNotUse = errors.New("accessToken is can not use")

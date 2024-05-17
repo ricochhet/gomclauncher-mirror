@@ -1,0 +1,40 @@
+fmt() {
+    gofumpt -l -w .
+}
+
+lint() {
+    golangci-lint run
+}
+
+test() {
+    go test ./...
+}
+
+build() {
+    go build -o gml-windows.exe -trimpath -ldflags="-w -s"
+}
+
+deadcode() {
+    deadcode github.com/xmdhs/gomclauncher
+}
+
+syso() {
+    windres gomclauncher.rc -O coff -o gomclauncher.syso
+}
+
+update() {
+    go get -u
+    go mod tidy
+}
+
+prebuild() {
+    @fmt
+    @lint
+    @test
+    @deadcode
+}
+
+all() {
+    @prebuild
+    @build
+}

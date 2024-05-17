@@ -96,10 +96,10 @@ func main() {
 	if list {
 		f.Listname()
 	}
-	if f.ApiAddress != "" {
+	if f.APIAddress != "" {
 		f.Authlib()
 	} else {
-		f.ApiAddress = "https://sessionserver.mojang.com"
+		f.APIAddress = "https://sessionserver.mojang.com"
 	}
 	if remove {
 		f.Remove(ms)
@@ -141,7 +141,7 @@ type up struct {
 }
 
 func check() {
-	version, err := checkByDns()
+	version, err := checkByDNS()
 	if err != nil {
 		log.Println(err)
 		return
@@ -174,13 +174,13 @@ func check() {
 
 var Errtxt = errors.New("LookupTXT err")
 
-func checkByDns() (string, error) {
+func checkByDNS() (string, error) {
 	l, err := net.LookupTXT("gml.xmdhs.com")
 	if err != nil {
-		return "", fmt.Errorf("checkByDns: %w", err)
+		return "", fmt.Errorf("checkByDNS: %w", err)
 	}
 	if len(l) != 1 {
-		return "", fmt.Errorf("checkByDns: %w", Errtxt)
+		return "", fmt.Errorf("checkByDNS: %w", Errtxt)
 	}
 	return l[0], nil
 }

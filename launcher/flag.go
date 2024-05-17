@@ -13,29 +13,29 @@ import (
 )
 
 type Gameinfo struct {
-	//D:/mc/.minecraft
+	// D:/mc/.minecraft
 	Minecraftpath string
-	//4096
+	// 4096
 	RAM string
-	//xmdhs
+	// xmdhs
 	Name string
-	//9f51573a5ec545828c2b09f7f08497b1
+	// 9f51573a5ec545828c2b09f7f08497b1
 	UUID string
-	//eyJhbGciOiJIUzI1NiJ9
+	// eyJhbGciOiJIUzI1NiJ9
 	AccessToken string
-	//D:/mc/.minecraft/versions/1.15.2
+	// D:/mc/.minecraft/versions/1.15.2
 	Gamedir string
-	//1.15.2
+	// 1.15.2
 	Version string
-	//1.15.json []byte
+	// 1.15.json []byte
 	Jsonbyte []byte
 	flag     map[string]string
 	Flag     []string
-	//"{\"preferredLanguage\":[\"zh-cn\"],\"registrationCountry\":[\"CN\"]}"
+	// "{\"preferredLanguage\":[\"zh-cn\"],\"registrationCountry\":[\"CN\"]}"
 	Userproperties string
 	Log            bool
 	JavePath       string
-	ApiAddress     string
+	APIAddress     string
 	authlibpath    string
 
 	inheritsFrom string
@@ -79,9 +79,9 @@ func (g *Gameinfo) GenLauncherCmdArgs() (l *launcher1155, args []string, err err
 	l.flag = append(l.flag, `-Dminecraft.client.jar=`+g.Minecraftpath+`/versions/`+l.json.ID+`/`+l.json.ID+`.jar`)
 	l.flag = append(l.flag, `-Xmx`+g.RAM+`m`)
 	l.flag = append(l.flag, `-Xms`+g.RAM+`m`)
-	if g.ApiAddress != "https://sessionserver.mojang.com" {
+	if g.APIAddress != "https://sessionserver.mojang.com" {
 		l.flag = append(l.flag, `-Dauthlibinjector.side=client`)
-		l.flag = append(l.flag, `-javaagent:`+g.authlibpath+`=`+g.ApiAddress)
+		l.flag = append(l.flag, `-javaagent:`+g.authlibpath+`=`+g.APIAddress)
 	}
 	if g.Flag != nil {
 		l.flag = append(l.flag, g.Flag...)
@@ -104,13 +104,13 @@ func (g *Gameinfo) GenLauncherCmdArgs() (l *launcher1155, args []string, err err
 //go:embed fixlog4j.jar
 var fixlog4jJar []byte
 
-// log4j to fix the CVE-2021-44228
+// log4j to fix the CVE-2021-44228.
 func log4j(l *launcher1155) {
 	path := filepath.Join(l.Minecraftpath, "fixlog4j-0.0.1.jar")
 	_, err := os.Stat(path)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
-			err := os.WriteFile(path, fixlog4jJar, 0777)
+			err := os.WriteFile(path, fixlog4jJar, 0o777)
 			if err != nil {
 				panic(err)
 			}
@@ -130,7 +130,11 @@ func creatlauncherprofiles(g *Gameinfo) error {
 		if err != nil {
 			return fmt.Errorf("creatlauncherprofiles: %w", err)
 		}
-		defer f.Close()
+		defer func() {
+			if err := f.Close(); err != nil {
+				panic(err)
+			}
+		}()
 		_, err = f.WriteString(`{"selectedProfile": "(Default)","profiles": {"(Default)": {"name": "(Default)"}},"clientToken": "88888888-8888-8888-8888-888888888888"}`)
 		if err != nil {
 			return fmt.Errorf("creatlauncherprofiles: %w", err)
@@ -140,7 +144,7 @@ func creatlauncherprofiles(g *Gameinfo) error {
 }
 
 //lint:ignore ST1012 导出字段
-var JsonErr = errors.New("json err")
+var ErrJSON = errors.New("json err")
 
 func (g *Gameinfo) modjson() (*launcher1155, error) {
 	g.flag = make(map[string]string)
@@ -149,7 +153,7 @@ func (g *Gameinfo) modjson() (*launcher1155, error) {
 	var err error
 	err = json.Unmarshal(g.Jsonbyte, &mod)
 	if err != nil {
-		return nil, JsonErr
+		return nil, ErrJSON
 	}
 	g.inheritsFrom = mod.InheritsFrom
 	if mod.InheritsFrom != "" {
@@ -159,7 +163,7 @@ func (g *Gameinfo) modjson() (*launcher1155, error) {
 		}
 		err = json.Unmarshal(b, &j)
 		if err != nil {
-			return nil, JsonErr
+			return nil, ErrJSON
 		}
 		for _, v := range mod.Libraries {
 			l := g.libraries2LibraryX115(v)
@@ -183,7 +187,7 @@ func (g *Gameinfo) modjson() (*launcher1155, error) {
 	} else {
 		err = json.Unmarshal(g.Jsonbyte, &j)
 		if err != nil {
-			return nil, JsonErr
+			return nil, ErrJSON
 		}
 		g.Version = j.ID
 	}
@@ -218,22 +222,21 @@ func minecraftArguments2jvm(m string) []interface{} {
 func (g *Gameinfo) libraries2LibraryX115(l Librarie) LibraryX115 {
 	p := Name2path(l.Name)
 	g.flag[p[0]+p[1]] = p[2]
-	FullLibraryX115(&l.LibraryX115, l.Url)
+	FullLibraryX115(&l.LibraryX115, l.URL)
 	return l.LibraryX115
 }
 
-// Name2path return [<group>,<name>,<version>]
+// Name2path return [<group>,<name>,<version>].
 func Name2path(name string) [3]string {
 	l := strings.Split(name, ":")
 	if len(l) != 3 {
 		return [3]string{name, name, "1.0"}
 	}
 	return *(*[3]string)(l)
-
 }
 
 type Modsjson struct {
-	//1.15.2
+	// 1.15.2
 	InheritsFrom string `json:"inheritsFrom"`
 	patchX115
 	Libraries []Librarie   `json:"libraries"`
@@ -241,7 +244,7 @@ type Modsjson struct {
 }
 
 type Librarie struct {
-	Url       string `json:"url"`
+	URL       string `json:"url"`
 	Clientreq bool   `json:"clientreq"`
 	Serverreq bool   `json:"serverreq"`
 	LibraryX115

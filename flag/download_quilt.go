@@ -37,13 +37,10 @@ func (f *Flag) Dquilt() {
 		}
 		ver = f.Download
 	}
-	if err != nil {
-		panic(err)
-	}
 	l, err := download.Getquiltversionlist(cxt, ver, f.Atype, func(s string) { fmt.Println(s) })
 	errr(err)
 	err = l.Downquiltjson(cxt, f.Downloadquilt, launcher.Minecraft, func(s string) { fmt.Println(s) })
-	if !(f.Run != "" && err != nil && errors.Is(err, download.NoSuch)) {
+	if !(f.Run != "" && err != nil && errors.Is(err, download.ErrNoSuch)) {
 		errr(err)
 	}
 	if err != nil {

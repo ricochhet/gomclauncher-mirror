@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -20,10 +21,6 @@ const (
 	loginWithXboxURL        = `https://api.minecraftservices.com/authentication/login_with_xbox`
 	getTheprofileURL        = `https://api.minecraftservices.com/minecraft/profile`
 )
-
-func MsLogin() (*Profile, error) {
-	return MsLoginRefresh(nil)
-}
 
 func MsLoginRefresh(t *MsToken) (*Profile, error) {
 	has := false
@@ -91,7 +88,7 @@ func getToken() (*MsToken, error) {
 	return &m, nil
 }
 
-func getXbltoken(token string) (Xbltoken, uhs string, err error) {
+func getXbltoken(token string) (xblToken, uhs string, err error) {
 	msg := `{"Properties": {"AuthMethod": "RPS","SiteName": "user.auth.xboxlive.com","RpsTicket": "d=` + jsonEscape(token) + `"},"RelyingParty": "http://auth.xboxlive.com","TokenType": "JWT"}`
 	b, err := httPost(authenticateURL, msg, `application/json`)
 	if err != nil {
@@ -108,12 +105,12 @@ func getXbltoken(token string) (Xbltoken, uhs string, err error) {
 	return m.Token, m.DisplayClaims.Xui[0].Uhs, nil
 }
 
-func getXSTStoken(Xbltoken string) (string, error) {
+func getXSTStoken(xblToken string) (string, error) {
 	msg := `{
 		"Properties": {
 			"SandboxId": "RETAIL",
 			"UserTokens": [
-				"` + jsonEscape(Xbltoken) + `" 
+				"` + jsonEscape(xblToken) + `" 
 			]
 		},
 		"RelyingParty": "rp://api.minecraftservices.com/",
@@ -121,7 +118,7 @@ func getXSTStoken(Xbltoken string) (string, error) {
 	 }`
 	b, err := httPost(authenticatewithXSTSURL, msg, `application/json`)
 	if err != nil {
-		e := ErrHttpCode{}
+		e := ErrHTTPCode{}
 		if errors.As(err, &e) && e.code == 401 {
 			m := map[string]interface{}{}
 			err1 := json.Unmarshal([]byte(e.msg), &m)
@@ -168,15 +165,19 @@ func loginWithXbox(uhs string, xstsToken string) (string, error) {
 	return t.AccessToken, nil
 }
 
-func GetProfile(Authorization string) (*Profile, error) {
-	reqs, err := http.NewRequest("GET", getTheprofileURL, nil)
+func GetProfile(authorization string) (*Profile, error) {
+	reqs, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, getTheprofileURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("getProfile: %w", err)
 	}
-	reqs.Header.Set("Authorization", "Bearer "+Authorization)
+	reqs.Header.Set("Authorization", "Bearer "+authorization)
 	rep, err := c.Do(reqs)
 	if rep != nil {
-		defer rep.Body.Close()
+		defer func() {
+			if err := rep.Body.Close(); err != nil {
+				panic(err)
+			}
+		}()
 	}
 	if err != nil {
 		return nil, fmt.Errorf("getProfile: %w", err)
@@ -186,7 +187,7 @@ func GetProfile(Authorization string) (*Profile, error) {
 		return nil, fmt.Errorf("getProfile: %w", err)
 	}
 	p := Profile{
-		AccessToken: Authorization,
+		AccessToken: authorization,
 	}
 	err = json.Unmarshal(b, &p)
 	if err != nil {
@@ -222,21 +223,25 @@ type xui struct {
 
 var (
 	ErrCode    = errors.New("code invalid")
-	ErrToken   = errors.New("Token invalid")
-	ErrProfile = errors.New("DO NOT HAVE GAME")
+	ErrToken   = errors.New("token invalid")
+	ErrProfile = errors.New("do not have game")
 )
 
-func httPost(url, msg, ContentType string) ([]byte, error) {
-	reqs, err := http.NewRequest("POST", url, strings.NewReader(msg))
+func httPost(url, msg, contentType string) ([]byte, error) {
+	reqs, err := http.NewRequestWithContext(context.TODO(), http.MethodPost, url, strings.NewReader(msg))
 	if err != nil {
 		return nil, fmt.Errorf("httPost: %w", err)
 	}
-	reqs.Header.Set("Content-Type", ContentType)
+	reqs.Header.Set("Content-Type", contentType)
 	reqs.Header.Set("Accept", "*/*")
 	reqs.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
 	rep, err := c.Do(reqs)
 	if rep != nil {
-		defer rep.Body.Close()
+		defer func() {
+			if err := rep.Body.Close(); err != nil {
+				panic(err)
+			}
+		}()
 	}
 	if err != nil {
 		return nil, fmt.Errorf("httPost: %w", err)
@@ -246,7 +251,7 @@ func httPost(url, msg, ContentType string) ([]byte, error) {
 		return nil, fmt.Errorf("httPost: %w", err)
 	}
 	if rep.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("httPost: %w", ErrHttpCode{
+		return nil, fmt.Errorf("httPost: %w", ErrHTTPCode{
 			code: rep.StatusCode,
 			msg:  string(b),
 		})

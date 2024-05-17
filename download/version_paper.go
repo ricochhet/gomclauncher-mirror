@@ -16,7 +16,7 @@ import (
 type Paperjsonv2 struct {
 	atype   string
 	version string
-	Json    launcher.Paperjsonv2
+	JSON    launcher.Paperjsonv2
 }
 
 func Getpaperversionlist(cxt context.Context, version, atype string, print func(string)) (*Paperjsonv2, error) {
@@ -28,7 +28,11 @@ func Getpaperversionlist(cxt context.Context, version, atype string, print func(
 		url := source(`https://api.papermc.io/v2/projects/paper/versions/`+version+`/builds`, f)
 		rep, _, err := Aget(cxt, url)
 		if rep != nil {
-			defer rep.Body.Close()
+			defer func() {
+				if err := rep.Body.Close(); err != nil {
+					panic(err)
+				}
+			}()
 		}
 		if err != nil {
 			f = r.fail(f)
@@ -44,11 +48,11 @@ func Getpaperversionlist(cxt context.Context, version, atype string, print func(
 		print(fmt.Sprintf("retry %d: %v", n, err))
 	}))...)
 	if err != nil {
-		return nil, fmt.Errorf("Getpaperversionlist: %w %w", err, FileDownLoadFail)
+		return nil, fmt.Errorf("Getpaperversionlist: %w %w", err, ErrFileDownLoadFail)
 	}
 
 	v := Paperjsonv2{}
-	err = json.Unmarshal(b, &v.Json)
+	err = json.Unmarshal(b, &v.JSON)
 	v.atype = atype
 	v.version = version
 	if err != nil {
@@ -60,7 +64,7 @@ func Getpaperversionlist(cxt context.Context, version, atype string, print func(
 func (v Paperjsonv2) Downpaperjar(cxt context.Context, version, apath string, print func(string)) error {
 	r := newrandurls(v.atype)
 	_, f := r.auto()
-	for _, vv := range v.Json.Builds {
+	for _, vv := range v.JSON.Builds {
 		if strconv.Itoa(vv.Build) == version {
 			id := v.version + `-paper-` + version
 			path, err := internal.SafePathJoin(apath, `/servers/`, id, id+".jar")
@@ -68,7 +72,7 @@ func (v Paperjsonv2) Downpaperjar(cxt context.Context, version, apath string, pr
 				return nil
 			}
 			if err != nil {
-				return fmt.Errorf("Downpaperjson: %w", err)
+				return fmt.Errorf("downpaperjson: %w", err)
 			}
 
 			err = retry.Do(func() error {
@@ -83,7 +87,7 @@ func (v Paperjsonv2) Downpaperjar(cxt context.Context, version, apath string, pr
 				print(fmt.Sprintf("retry %d: %v", n, err))
 			}))...)
 			if err != nil {
-				return fmt.Errorf("Downpaperjson: %w %w", err, FileDownLoadFail)
+				return fmt.Errorf("downpaperjson: %w %w", err, ErrFileDownLoadFail)
 			}
 			err = Newpaperjson(v.version, version, launcher.Minecraft)
 			if err != nil {
@@ -92,5 +96,5 @@ func (v Paperjsonv2) Downpaperjar(cxt context.Context, version, apath string, pr
 			return nil
 		}
 	}
-	return NoSuch
+	return ErrNoSuch
 }

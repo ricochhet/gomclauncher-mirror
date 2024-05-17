@@ -74,7 +74,7 @@ func (r *randurls) auto() (int, string) {
 
 	a := rand.Intn(i) + 1
 	for k, v := range r.typeweight {
-		a = a - v
+		a -= v
 		if a <= 0 {
 			return lenMap, k
 		}
