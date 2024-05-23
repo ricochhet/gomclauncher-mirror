@@ -68,7 +68,7 @@ var en = map[string]string{
 	"msauth.ErrHostname":         "Don't bother with things like forgetting passwords here",
 	"auth.ErrCode":               "Attempt to re-login with Microsoft account",
 	"auth.ErrProfile":            "It seems you haven't purchased the game or migrated your account yet",
-	"msauth.ErrNotInstallChrome": "Please install Chrome, you can download it here https://www.google.cn/intl/zh-CN/chrome/ \n Of course, Chromium is also acceptable",
+	"msauth.ErrNotInstallChrome": "Please install Chrome, you can download it here https://www.google.cn/intl/en-US/chrome/ \n Of course, Chromium is also acceptable",
 	"emailnil":                   "Please set the email \n For example, -email example@example.com",
 	"auth.NotOk-refresh":         "Please try logging in again",
 	"Refresherr":                 "Login failed, possibly due to network issues. You can try again",
@@ -91,5 +91,5 @@ var en = map[string]string{
 	"webfail":                    "Perhaps it's a network issue",
 	"legacynoexit":               "Resource files do not exist, please enable file verification: %w",
 	"tidy":                       "Remove unused files in the assets/objects folder",
-	"ErrChild":                   "Underage account, try changing the birthdate or adding to family https://support.xbox.com/zh-cn/help/family-online-safety/child-accounts/add-family-member-on-xbox-one",
+	"ErrChild":                   "Underage account, try changing the birthdate or adding to family https://support.xbox.com/en-US/help/family-online-safety/child-accounts/add-family-member-on-xbox-one",
 }

@@ -2,12 +2,16 @@ LDFLAGS=-X 'main.buildDate=$(shell date)' -X 'main.gitHash=$(shell git rev-parse
 
 GO_BUILD=go build -trimpath -ldflags "$(LDFLAGS)"
 
-.PHONY: all fmt lint test deadcode syso gml-linux gml-linux-arm gml-darwin gml-darwin-arm gml-windows clean
+.PHONY: all fmt mod lint test deadcode syso gml-linux gml-linux-arm gml-darwin gml-darwin-arm gml-windows clean
 
 all: gml-linux gml-linux-arm gml-darwin gml-darwin-arm gml-windows 
 
 fmt:
 	gofumpt -l -w .
+
+mod:
+	go get -u
+	go mod tidy
 
 lint:
 	golangci-lint run
