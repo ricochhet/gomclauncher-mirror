@@ -50,3 +50,14 @@ func TestVerlistpaper(t *testing.T) {
 		t.Fatal(fmt.Errorf("versionspaper is null or empty"))
 	}
 }
+
+func TestVerlistjava(t *testing.T) {
+	versionsjava, err := f.Arunjavalist()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(versionsjava) == 0 {
+		t.Fatal(fmt.Errorf("versionsjava is null or empty"))
+	}
+}

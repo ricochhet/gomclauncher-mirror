@@ -61,8 +61,15 @@ func main() {
 		}
 		fmt.Println(strings.Join(v, "\n"))
 	}
+	if f.Verlistjava {
+		v, err := f.Arunjavalist()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(strings.Join(v, "\n"))
+	}
 	if f.Runlist {
-		s := aflag.Find(launcher.Minecraft + `/versions`)
+		s := internal.Find(launcher.Minecraft + `/versions`)
 		for _, v := range s {
 			if aflag.Test(launcher.Minecraft + `/versions/` + v + `/` + v + ".json") {
 				fmt.Println(v)
@@ -70,9 +77,17 @@ func main() {
 		}
 	}
 	if f.Runlistpaper {
-		s := aflag.Find(launcher.Minecraft + `/servers`)
+		s := internal.Find(launcher.Minecraft + `/servers`)
 		for _, v := range s {
 			if aflag.Testservers(launcher.Minecraft + `/servers/` + v + `/` + v + ".json") {
+				fmt.Println(v)
+			}
+		}
+	}
+	if f.Runlistjava {
+		s := internal.Find(launcher.Minecraft + `/runtimes`)
+		for _, v := range s {
+			if internal.HasPrefixInSlice(v, internal.JavaRuntimeTypeNames) {
 				fmt.Println(v)
 			}
 		}
@@ -92,6 +107,10 @@ func main() {
 	if f.Downloadpaper != "" {
 		f.Outmsg = false
 		f.Dpaper()
+	}
+	if f.Downloadjava != "" {
+		f.Outmsg = false
+		f.Djava()
 	}
 	if list {
 		f.Listname()

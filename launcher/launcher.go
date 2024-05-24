@@ -8,6 +8,7 @@ import (
 	"runtime"
 
 	"github.com/Masterminds/semver/v3"
+	"github.com/xmdhs/gomclauncher/internal"
 )
 
 type launcher1155 struct {
@@ -27,6 +28,34 @@ func (l launcher1155) Launcher115() error {
 	var cmd *exec.Cmd
 	if l.JavePath == "" {
 		l.JavePath = "java"
+	}
+	if internal.HasPrefixInSlice(l.JavePath, internal.JavaRuntimeTypeNames) {
+		path, err := internal.SafePathJoin(l.Minecraftpath, `runtimes`, l.JavePath)
+		if err != nil {
+			return fmt.Errorf("launcher1155.Launcher115: %w", err)
+		}
+		s, err := internal.SafeFind(path)
+		if err != nil {
+			return fmt.Errorf("launcher1155.Launcher115: %w", err)
+		}
+		if len(s) == 0 {
+			return fmt.Errorf("launcher1155.Launcher115: invalid java runtime type")
+		}
+
+		javapath, err := internal.SafePathJoin(path, "bin", "java")
+		if runtime.GOOS == "windows" {
+			javapath += ".exe"
+		}
+		if err != nil {
+			return fmt.Errorf("launcher1155.Launcher115: %w", err)
+		}
+		fmt.Println(javapath)
+		if _, err := os.Stat(javapath); err == nil {
+			l.JavePath = javapath
+		} else {
+			fmt.Println(err)
+			return fmt.Errorf("launcher1155.Launcher115: %w", err)
+		}
 	}
 	if l.Log {
 		cmd = exec.Command(l.JavePath, l.flag...)

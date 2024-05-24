@@ -7,6 +7,7 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/xmdhs/gomclauncher/download"
+	"github.com/xmdhs/gomclauncher/internal"
 	"github.com/xmdhs/gomclauncher/lang"
 )
 
@@ -100,4 +101,8 @@ func (f *Flag) Arunpaperlist() ([]string, error) {
 	}
 
 	return nil, nil
+}
+
+func (f *Flag) Arunjavalist() ([]string, error) {
+	return internal.JavaRuntimeTypeNames, nil
 }

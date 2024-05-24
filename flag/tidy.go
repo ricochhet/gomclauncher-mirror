@@ -6,12 +6,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/xmdhs/gomclauncher/internal"
 	"github.com/xmdhs/gomclauncher/launcher"
 )
 
 func (f *Flag) Tidy() {
 	l := []string{}
-	s := Find(launcher.Minecraft + `/versions`)
+	s := internal.Find(launcher.Minecraft + `/versions`)
 	for _, v := range s {
 		if Test(launcher.Minecraft + `/versions/` + v + `/` + v + ".json") {
 			l = append(l, v)

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
@@ -74,4 +75,43 @@ func SafePathJoin(base string, path ...string) (string, error) {
 		return "", ErrPathInvalid
 	}
 	return p, nil
+}
+
+func Find(path string) []string {
+	files, err := os.ReadDir(path)
+	if err != nil {
+		panic(err)
+	}
+	s := make([]string, 0)
+	for _, f := range files {
+		if f.IsDir() {
+			s = append(s, f.Name())
+		}
+	}
+	return s
+}
+
+func SafeFind(path string) ([]string, error) {
+	files, err := os.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+	s := make([]string, 0)
+	for _, f := range files {
+		if f.IsDir() {
+			s = append(s, f.Name())
+		}
+	}
+	return s, nil
+}
+
+var JavaRuntimeTypeNames = []string{"alpha", "beta", "delta", "gamma", "gamma-snapshot", "jre-legacy", "minecraft-java-exe"}
+
+func HasPrefixInSlice(s string, prefixes []string) bool {
+	for _, p := range prefixes {
+		if strings.HasPrefix(s, p) {
+			return true
+		}
+	}
+	return false
 }

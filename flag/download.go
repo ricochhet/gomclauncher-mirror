@@ -23,14 +23,17 @@ type Flag struct {
 	Downloadfabric string
 	Downloadquilt  string
 	Downloadpaper  string
+	Downloadjava   string
 	Verlist        string
 	Verlistfabric  string
 	Verlistquilt   string
 	Verlistpaper   string
+	Verlistjava    bool
 	Run            string
 	Runpaper       string
 	Runlist        bool
 	Runlistpaper   bool
+	Runlistjava    bool
 	Runram         string
 	Runflag        string
 	Proxy          string

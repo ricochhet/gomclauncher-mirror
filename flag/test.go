@@ -48,17 +48,3 @@ type t struct {
 type t2 struct {
 	ID string `json:"id"`
 }
-
-func Find(path string) []string {
-	files, err := os.ReadDir(path)
-	if err != nil {
-		panic(err)
-	}
-	s := make([]string, 0)
-	for _, f := range files {
-		if f.IsDir() {
-			s = append(s, f.Name())
-		}
-	}
-	return s
-}
