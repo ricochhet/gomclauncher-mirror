@@ -3,7 +3,7 @@ module github.com/xmdhs/gomclauncher
 go 1.22
 
 require (
-	github.com/Masterminds/semver/v3 v3.2.1
+	github.com/Masterminds/semver/v3 v3.3.0
 	github.com/Xuanwo/go-locale v1.1.0
 	github.com/avast/retry-go/v4 v4.6.0
 	github.com/cli/browser v1.3.0
