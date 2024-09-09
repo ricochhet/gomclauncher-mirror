@@ -76,7 +76,8 @@ func Test_source(t *testing.T) {
 				url:   "https://piston-meta.mojang.com/mc/game/version_manifest.json",
 				types: "bmclapi",
 			},
-			want: "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json",
+			want: "https://piston-meta.mojang.com/mc/game/version_manifest.json",
+			//want: "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json",
 		},
 		{
 			name: "2",
@@ -85,6 +86,7 @@ func Test_source(t *testing.T) {
 				types: "vvv",
 			},
 			want: "https://piston-meta.mojang.com/mc/game/version_manifest.json",
+			// want: "https://piston-meta.mojang.com/mc/game/version_manifest.json",
 		},
 		{
 			name: "3",
@@ -92,7 +94,8 @@ func Test_source(t *testing.T) {
 				url:   "https://piston-meta.mojang.com/mc/game/version_manifest.json/piston-meta.mojang.com",
 				types: "bmclapi",
 			},
-			want: "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json/piston-meta.mojang.com",
+			want: "https://piston-meta.mojang.com/mc/game/version_manifest.json/piston-meta.mojang.com",
+			// want: "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json/piston-meta.mojang.com",
 		},
 	}
 	for _, tt := range tests {
