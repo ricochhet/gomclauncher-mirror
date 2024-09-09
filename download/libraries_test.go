@@ -77,7 +77,7 @@ func Test_source(t *testing.T) {
 				types: "bmclapi",
 			},
 			want: "https://piston-meta.mojang.com/mc/game/version_manifest.json",
-			//want: "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json",
+			// want: "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json",
 		},
 		{
 			name: "2",
