@@ -41,4 +41,4 @@ gml-windows:
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GO_BUILD) -o gml-windows.exe
 
 clean:
-	rm -f gml-linux gml-darwin gml-arm-darwin gml-windows.exe
+	rm -f gml-linux gml-linux-arm gml-darwin gml-darwin-arm gml-windows.exe
