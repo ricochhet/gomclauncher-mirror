@@ -7,7 +7,7 @@ require (
 	github.com/Xuanwo/go-locale v1.1.0
 	github.com/avast/retry-go/v4 v4.6.0
 	github.com/cli/browser v1.3.0
-	github.com/cli/oauth v1.0.1
+	github.com/cli/oauth v1.1.1
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/sync v0.7.0
 	golang.org/x/text v0.16.0
