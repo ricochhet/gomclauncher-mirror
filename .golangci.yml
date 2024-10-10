@@ -32,7 +32,7 @@ linters:
         - errchkjson
         - errorlint
         - exhaustive
-        - exportloopref
+        # - exportloopref // deprecated
         - fatcontext
         - gci
         - ginkgolinter

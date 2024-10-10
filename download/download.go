@@ -233,7 +233,7 @@ func (d downinfo) down(ctx context.Context) error {
 		}
 		if !ver(d.path, d.Sha1) {
 			f = d.fail(f)
-			return fmt.Errorf(lang.Lang("filecheckerr") + " " + url)
+			return fmt.Errorf(lang.Lang("filecheckerr") + " " + url) //nolint:govet // ...
 		}
 		return nil
 	}, append(retryOpts, retry.OnRetry(func(n uint, err error) {

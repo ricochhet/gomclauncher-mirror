@@ -21,8 +21,8 @@ func (f *Flag) Aonline() {
 	}
 	err := f.Gmlconfig[f.APIAddress][f.Email].setonline(&f.Gmlconfig, f)
 	if err != nil {
-		switch err { //nolint:errorlint // ...
-		case ErrHaveProfiles:
+		switch {
+		case errors.Is(err, ErrHaveProfiles):
 			a := auth.Auth{
 				AccessToken: f.Gmlconfig[f.APIAddress][f.Email].AccessToken,
 				ClientToken: f.Gmlconfig[f.APIAddress][f.Email].ClientToken,
@@ -54,7 +54,7 @@ func (f *Flag) Aonline() {
 					saveconfig(f.Gmlconfig)
 				}
 			}
-		case auth.ErrNotOk:
+		case errors.Is(err, auth.ErrNotOk):
 			fmt.Println(lang.Lang("auth.NotOk"))
 			os.Exit(0)
 		default:
