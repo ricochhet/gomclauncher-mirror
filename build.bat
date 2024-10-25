@@ -8,7 +8,7 @@ go build -o gml-linux -trimpath -ldflags %LDFLAGS%
 SET CGO_ENABLED=0
 SET GOOS=linux
 SET GOARCH=arm64
-go build -o gml-arm-linux -trimpath -ldflags %LDFLAGS%
+go build -o gml-linux-arm64 -trimpath -ldflags %LDFLAGS%
 
 SET CGO_ENABLED=0
 SET GOOS=darwin
@@ -18,7 +18,7 @@ go build -o gml-darwin -trimpath -ldflags %LDFLAGS%
 SET CGO_ENABLED=0
 SET GOOS=darwin
 SET GOARCH=arm64
-go build -o gml-arm-darwin -trimpath -ldflags %LDFLAGS%
+go build -o gml-darwin-arm64 -trimpath -ldflags %LDFLAGS%
 
 SET CGO_ENABLED=0
 SET GOOS=windows
